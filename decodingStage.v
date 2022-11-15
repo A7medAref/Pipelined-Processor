@@ -7,24 +7,30 @@ module decodingStage(
 	input write_en,
     output [15:0] result);
 
+// Just to remove warning
 wire [2:0] reg1, reg2, opcode;
+wire[7:0] immediateValue;
+///////////////////////////
+// To be simple to use
 assign opcode = instruction[15:13];
 assign reg1 = instruction[12:10];
 assign reg2 = instruction[9:7];
 
+// assumsion
+assign immediateValue = instruction[7:0];
+///////////////////////////
+
 wire mem_read, mem_write, mem_read_buf, mem_write_buf;
 wire[1:0] alu_operation, alu_operation_buf;
-wire wb, wb_buf;
-
-
+wire wb, wb_buf, destination_alu_select, destination_alu_select_buf;
 wire [15:0] read_data1, read_data2;
 wire [15:0] read_data1_buf, read_data2_buf;
 
-wire[15:0] temp_immediateValue;
-
-reg_file rf(clk, reset, reg1, reg2, write_addr,
+// Register file that contains the registers
+reg_file rf(clk, reset/*For testing purpses*/, reg1, reg2, write_addr,
 			write_data, write_en, read_data1, read_data2, read_data1_buf, read_data2_buf);
 
+// The control unite responsible for generating the signals
 control_unit cu(
     clk,
     opcode,
@@ -32,14 +38,16 @@ control_unit cu(
     mem_write,
     alu_operation,
     wb,
+    destination_alu_select,
     mem_read_buf,
     mem_write_buf,
     alu_operation_buf,
-    wb_buf
+    wb_buf,
+    destination_alu_select_buf
 );
 
+// ALU stage contains the stages ==> execute -> memory -> write back 
 ALU_stage alu_module(clk, mem_read_buf, mem_write_buf, read_data1_buf,
-                read_data2_buf, temp_immediateValue, alu_operation_buf,
-                0/*temp till discussing immediate value*/, write_addr, wb, result);
-
+                read_data2_buf, immediateValue, alu_operation_buf,
+                destination_alu_select_buf, write_addr, wb, result);
 endmodule

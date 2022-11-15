@@ -14,8 +14,9 @@ module reg_file (
 );
     reg[15:0] data[7:0];
 
+    ////////////////////////////
+    // for testing purposes
     integer i;
-    
     always @(reset) begin
         if (reset) begin
             for (i = 0; i<8; i=i+1) begin
@@ -23,6 +24,7 @@ module reg_file (
             end
         end
     end
+    ////////////////////////////
 
     always @(posedge clk) begin
         // buffering

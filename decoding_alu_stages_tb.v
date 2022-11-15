@@ -25,6 +25,9 @@ decodingStage ds(
         write_addr = 0;
         write_data = 1;
         write_en = 0;
+        #50
+        clk=0;
+        instruction = 16'b0010010110111111;
     end
 
     always #50 begin
