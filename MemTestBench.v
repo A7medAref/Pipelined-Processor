@@ -1,12 +1,12 @@
 
-module RegFileTb();
+module instructionMemoryTB();
 localparam N=16;
 reg clk,rst,read_enable,write_enable;
 reg[4:0] read_addr,write_addr;
 reg[15:0] write_data;
 wire[15:0]read_data;
 
-NMemory Reg1(
+instructionMemory Reg1(
 	read_enable,
 	write_enable,
 	read_data,
@@ -43,8 +43,8 @@ initial begin
 	write_data=16'b1111_0000_0000_0000;
 
 	#4 read_enable=1;
-    write_enable=0;
-    read_addr=5'b00000;
+     write_enable=0;
+     read_addr=5'b00000;
 	#4 read_addr=5'b00001;		
 	#4 read_addr=5'b00010;
 	#4 read_addr=5'b00011;

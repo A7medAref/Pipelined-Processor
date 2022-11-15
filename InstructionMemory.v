@@ -1,31 +1,30 @@
-module NMemory #(parameter N=5) (read_enable,write_enable,read_data,write_data,clk,rst,read_addr,write_addr);
+module instructionMemory #(parameter N=20) (write_enable,read_data,write_data,clk,rst,read_addr,write_addr);
 
-input read_enable,write_enable,clk,rst;
+input write_enable,clk,rst;
+
 input[15:0]write_data;
-input[N-1:0] read_addr,write_addr;
-output reg[15:0]read_data;
-wire [(1<<N)-1:0]Activate;
-wire [15:0]RegOut[(1<<N)-1:0];
+input[31:0] read_addr,write_addr;
+output[15:0]read_data;
 
-NDecoder D (write_addr,Activate,clk);
+reg [15:0] read_data;
+reg[15:0]regs[(1<<N)-1:0];
 
-genvar j;
-generate
-	for(j=0;j<(1<<N);j=j+1)begin
-		NRegister R(write_data,RegOut[j],Activate[j],write_enable,rst,clk);
+integer i;
+
+always@(posedge clk)begin
+	if(rst)begin
+		for(i=0;i<8;i=i+1)begin
+			regs[i]=16'b00;
+		end
+	end else begin
+		if(write_enable)begin
+			regs[write_addr]=write_data;
 	end
-endgenerate
+end
+end
 
 always@(negedge clk)begin
-	if(rst)begin
-	end else begin
-		if(read_enable)begin
-			read_data=RegOut[read_addr];
-		end
-	end
+	read_data=regs[read_addr];
 end
 
 endmodule
-
-
-
