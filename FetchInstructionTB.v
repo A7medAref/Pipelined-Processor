@@ -31,7 +31,7 @@ initial begin
 	write_data=write_data+1;
 	#4 write_addr=write_addr+1;
 	write_data=write_data+1;
-	#4 write_enable=0;
+	#3 write_enable=0;
 
 end
 

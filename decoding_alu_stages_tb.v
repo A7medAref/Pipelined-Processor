@@ -1,19 +1,20 @@
-module decode_alu_stages_tb;
-	reg clk, reset;
-	reg [2:0] write_addr;
-	reg [15:0] write_data;
-	reg [15:0] instruction;
-	reg write_en;
-    wire [15:0] result;
+module aa_pipe_tb;
 
-decodingStage ds(
-    clk,
-    reset,
-	write_addr,
-	write_data,
-	instruction,
-	write_en,
-    result);
+    wire[15:0] data_test0, data_test1, data_test2, data_test3,
+            data_test4, data_test5, data_test6, data_test7;
+
+	reg clk, reset;
+	reg [15:0] instruction;
+    wire[15:0] result;
+    
+    pipelined_processor ds(
+        clk,
+        reset,
+        instruction,
+        data_test0, data_test1, data_test2, data_test3,
+        data_test4, data_test5, data_test6, data_test7,
+        result
+    );
 
     initial begin
         reset = 1;
@@ -22,9 +23,6 @@ decodingStage ds(
         #50
         clk=0;
         instruction = 16'b0110010110111111;
-        write_addr = 0;
-        write_data = 1;
-        write_en = 0;
         #50
         clk=0;
         instruction = 16'b0010010110111111;

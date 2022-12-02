@@ -10,12 +10,30 @@ module reg_file (
 	output reg[15:0] read_data2,
 
     output reg[15:0] read_data1_buf,
-	output reg[15:0] read_data2_buf
+	output reg[15:0] read_data2_buf,
+
+    // To see the registers easier
+    output[15:0] data_test0,
+    output[15:0] data_test1,
+    output[15:0] data_test2,
+    output[15:0] data_test3,
+    output[15:0] data_test4,
+    output[15:0] data_test5,
+    output[15:0] data_test6,
+    output[15:0] data_test7
 );
     reg[15:0] data[7:0];
 
     ////////////////////////////
     // for testing purposes
+    assign data_test0 = data[0];
+    assign data_test1 = data[1];
+    assign data_test2 = data[2];
+    assign data_test3 = data[3];
+    assign data_test4 = data[4];
+    assign data_test5 = data[5];
+    assign data_test6 = data[6];
+    assign data_test7 = data[7];
     integer i;
     always @(reset) begin
         if (reset) begin
