@@ -1,7 +1,7 @@
 module dataMemory #(parameter N=10) (read_enable,write_enable,read_data,write_data,clk,rst,read_addr,write_addr);
 
 input read_enable,write_enable,clk,rst;
-input[15:0]write_data;
+input[15:0] write_data;
 input[2:0] read_addr,write_addr;
 output[15:0]read_data;
 reg [15:0] read_data;

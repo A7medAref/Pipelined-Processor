@@ -1,4 +1,3 @@
-
 module IFTB();
 reg clk,rst,write_enable;
 reg[31:0] PC,write_addr;
@@ -32,13 +31,9 @@ initial begin
 	#4 write_addr=write_addr+1;
 	write_data=write_data+1;
 	#4 write_enable=0;
-
 end
 
 always begin
 #2 clk= !clk;
 end
 endmodule
-
-
-

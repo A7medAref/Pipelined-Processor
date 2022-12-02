@@ -1,11 +1,14 @@
-module fetchInstructionModule(write_enable,instruction,write_data,clk,rst,write_addr);
+module fetchInstructionModule(write_enable, instruction_buf, write_data,clk,rst,write_addr);
 
 input write_enable,clk,rst;
 input[15:0] write_data;
 input[31:0] write_addr;
-output wire [15:0]instruction;
+
+wire [15:0]instruction;
+output wire [15:0]instruction_buf;
 reg[31:0] pc=32'b0100000;
-instructionMemory IF(write_enable,instruction,write_data,clk,rst,pc,write_addr);
+
+instructionMemory IF(write_enable, instruction, instruction_buf,write_data,clk,rst,pc,write_addr);
 
 always@(negedge clk)begin
 	if(rst)
