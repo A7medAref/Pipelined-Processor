@@ -53,17 +53,6 @@ reg_file rf(clk, reset/*For testing purpses*/, reg1, reg2, write_addr,
 			write_data, write_en, read_data1, read_data2, read_data1_buf, read_data2_buf, read_data2_buf2);
 
 
-
-always@(read_data1) begin
-  $display(alu_operation_buf);
-  $display(read_data1);
-  $display(read_data2);
-end
-
-// always@(alu_operation) begin
-//   $display(alu_operation);
-// end
-
 // The control unite responsible for generating the signals
 control_unit cu(
     clk,
@@ -82,7 +71,6 @@ control_unit cu(
     wb_buf,
     wb_buf2,
     wb_buf3,
-    destination_alu_select_buf,
-    instruction
+    destination_alu_select_buf
 );
 endmodule

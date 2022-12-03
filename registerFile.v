@@ -28,16 +28,17 @@ module reg_file (
     ////////////////////////////
 
     always @(posedge clk) begin
-        // buffering
-        read_data2_buf2 = read_data2_buf;
-        read_data1_buf = read_data1;
-        read_data2_buf = read_data2;
-
         if(reg_write) begin
             data[write_addr] = write_data;
         end
     end
-    always @(negedge clk) begin 
+
+    always @(negedge clk) begin
+        // buffering
+        read_data2_buf2 = read_data2_buf;
+        read_data1_buf = read_data1;
+        read_data2_buf = read_data2;
+ 
         read_data1 = data[read_addr1];
 		read_data2 = data[read_addr2];
     end

@@ -17,8 +17,7 @@ module control_unit(
     output reg wb_buf,
     output reg wb_buf2,
     output reg wb_buf3,
-    output reg destination_alu_select_buf,
-    input [15:0] instruction
+    output reg destination_alu_select_buf
 );
 
     always @(negedge clk) begin

@@ -7,7 +7,7 @@ module ALU_stage (input clk, input[15:0] register_content1,
     reg[15:0] result;
     
     ALU alu_1(register_content1, register_content2, alu_control_signal, out, carry, zero, neg);
-    
+
     always @(negedge clk) begin
         // Buffering
         result_buf2 = result_buf;
