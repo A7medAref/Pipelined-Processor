@@ -2,8 +2,6 @@ module pipelinedProcessor(
 	input clk,
     input reset,
 	input [2:0] write_addr,
-	input [15:0] write_data,
-	input write_en,
     output [15:0] wb_output,
     // fetch module only
     input write_enable_fm,
@@ -38,7 +36,7 @@ module pipelinedProcessor(
     fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm);
 
     decodingStage ds_1331(
-        clk, reset, write_addr, write_data, instruction, write_en,
+        clk, reset, write_addr, wb_output, instruction,
         
         // Needs another buffering
         mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3, read_data1_buf, read_data2_buf, read_data2_buf2,

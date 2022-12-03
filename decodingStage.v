@@ -4,7 +4,6 @@ module decodingStage(
 	input [2:0] write_addr,
 	input [15:0] write_data,
 	input [15:0] instruction,
-	input write_en,
     output mem_read_buf,
     output mem_write_buf,
     // buffering for memory stage
@@ -45,11 +44,17 @@ wire[2:0] alu_operation;
 wire wb, destination_alu_select;
 // wb_buf, destination_alu_select_buf
 
+wire [15:0] read_data2_buf2;
+
 // Register file that contains the registers
-reg_file rf(clk, reset/*For testing purpses*/, reg1, reg2, write_addr,
-			write_data, write_en, read_data1, read_data2, read_data2_buf);
+reg_file rf(clk, reset/*For testing purpses*/, alu_operation, mem_write, reg1, reg2, read_data2_buf2,
+			write_data, wb_buf3, read_data1, read_data2, read_data2_buf, read_data2_buf2);
 
-
+// always@(posedge clk) begin
+//     $display(wb_buf3);
+//     $display(write_data);
+//     $display(read_data2_buf2);
+// end
 
 // The control unite responsible for generating the signals
 control_unit cu(

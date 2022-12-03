@@ -42,7 +42,7 @@ module control_unit(
         alu_operation = (opcode == 3 /*add*/) ? 0 :
                         (opcode == 2 /*std*/) ? 3 :
                         (opcode == 4 /*not*/) ? 1 : 4 /*NOP*/;
-
+        
         if (opcode == 1) begin
             mem_read = 1;
             alu_operation = 2; /*pass the destination as a result*/
@@ -52,6 +52,7 @@ module control_unit(
             destination_alu_select = 0;
         end
 
-        wb = (opcode == 1 || alu_operation != 3);
+        
+        wb = (opcode == 1 || opcode == 3 || opcode == 4);
     end
 endmodule

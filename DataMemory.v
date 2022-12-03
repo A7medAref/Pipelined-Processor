@@ -11,7 +11,6 @@ reg[15:0]regs[(1<<N)-1:0];
 integer i;
 
 always@(posedge clk)begin
-	
 	if(rst)begin
 		for(i=0;i<8;i=i+1)begin
 			regs[i]=16'b00;
@@ -23,6 +22,7 @@ always@(posedge clk)begin
 		end
 		if(read_enable)begin
 			read_data=regs[read_addr];
+			$display("data read from memory at %b with value= %b",read_addr, read_data);
 		end
 end
 end

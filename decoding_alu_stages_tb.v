@@ -1,7 +1,6 @@
 module aa_pipe_tb;
 	reg clk, reset;
 	reg [2:0] write_addr;
-	reg [15:0] write_data;
 	reg write_en;
     wire [15:0] result;
     reg rst_fm;
@@ -17,8 +16,6 @@ module aa_pipe_tb;
         clk,
         reset,
         write_addr,
-        write_data,
-        write_en,
         result,
         write_enable_fm,
         rst_fm,
@@ -34,17 +31,23 @@ module aa_pipe_tb;
         clk=1;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b100_010_0110111111; // NOT
+        write_data_fm=16'b010_101_010_0111111; // STD
         
         #100 rst_fm=0;
         
         #100 write_enable_fm=1;
         
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b010_001_001_0111111; // STD
+        write_data_fm=16'b001_010_101_0111111; // LDD
+        
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b011_010_111_0111111; // ADD
 
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b011_010_001_0111111; // ADD
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b100_100_1110111111; // NOT
+
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b101_100_1110111111; // NOT
 
         #100
         reset = 1;
