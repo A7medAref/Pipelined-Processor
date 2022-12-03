@@ -31,23 +31,23 @@ module aa_pipe_tb;
         clk=1;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b010_101_010_0111111; // STD
+        write_data_fm=16'b010_001_010_0111111; // STD
         
         #100 rst_fm=0;
         
         #100 write_enable_fm=1;
         
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b001_010_101_0111111; // LDD
+        write_data_fm=16'b011_001_010_0111111; // ADD
         
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b011_010_111_0111111; // ADD
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b100_011_000_0111101; // NOT
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b101_100_1110111111; // NOP
 
         // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b100_100_1110111111; // NOT
-
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b101_100_1110111111; // NOT
+        write_data_fm=16'b001_010_111_0111111; // LDD
 
         #100
         reset = 1;
@@ -61,3 +61,13 @@ module aa_pipe_tb;
         clk = ~clk;
     end
 endmodule
+
+// STD R1, R2
+// ADD R1, R2
+// NOT R3
+// NOP
+// LDD R2, R7
+
+// result changed
+// R2 = 3, R3 = 1111_1111_1111_1100 , R7 = 2
+// MEMORY (WITH LOCATION 010) = 1 
