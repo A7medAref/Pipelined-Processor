@@ -34,11 +34,18 @@ module aa_pipe_tb;
         clk=1;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b010_001_001_0111111;
+        write_data_fm=16'b100_010_0110111111; // NOT
         
         #100 rst_fm=0;
         
         #100 write_enable_fm=1;
+        
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b010_001_001_0111111; // STD
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b011_010_001_0111111; // ADD
+
         #100
         reset = 1;
         #100

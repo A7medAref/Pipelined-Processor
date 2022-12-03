@@ -8,11 +8,8 @@ module reg_file (
     input reg_write,
     output reg[15:0] read_data1,
 	output reg[15:0] read_data2,
-
-    output reg[15:0] read_data1_buf,
-	output reg[15:0] read_data2_buf,
-	output reg[15:0] read_data2_buf2
-);
+	output reg[15:0] read_data2_buf
+    );
     reg[15:0] data[7:0];
 
     ////////////////////////////
@@ -35,8 +32,6 @@ module reg_file (
 
     always @(negedge clk) begin
         // buffering
-        read_data2_buf2 = read_data2_buf;
-        read_data1_buf = read_data1;
         read_data2_buf = read_data2;
  
         read_data1 = data[read_addr1];

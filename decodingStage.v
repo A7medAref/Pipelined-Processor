@@ -12,9 +12,9 @@ module decodingStage(
     output mem_write_buf2,
     output mem_read_buf3,
 
-    output [15:0] read_data1_buf,
+    output [15:0] read_data1,
+    output [15:0] read_data2,
     output [15:0] read_data2_buf,
-    output [15:0] read_data2_buf2,
 
     output [15:0] immediateValue, 
     output [2:0] alu_operation_buf,
@@ -45,12 +45,10 @@ wire[2:0] alu_operation;
 wire wb, destination_alu_select;
 // wb_buf, destination_alu_select_buf
 
-wire [15:0] read_data1, read_data2;
-// wire [15:0] read_data1_buf, read_data2_buf;
-
 // Register file that contains the registers
 reg_file rf(clk, reset/*For testing purpses*/, reg1, reg2, write_addr,
-			write_data, write_en, read_data1, read_data2, read_data1_buf, read_data2_buf, read_data2_buf2);
+			write_data, write_en, read_data1, read_data2, read_data2_buf);
+
 
 
 // The control unite responsible for generating the signals
