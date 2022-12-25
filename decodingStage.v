@@ -50,12 +50,6 @@ wire [15:0] read_data2_buf2;
 reg_file rf(clk, reset/*For testing purpses*/, alu_operation, mem_write, reg1, reg2, read_data2_buf2,
 			write_data, wb_buf3, read_data1, read_data2, read_data2_buf, read_data2_buf2);
 
-// always@(posedge clk) begin
-//     $display(wb_buf3);
-//     $display(write_data);
-//     $display(read_data2_buf2);
-// end
-
 // The control unite responsible for generating the signals
 control_unit cu(
     clk,

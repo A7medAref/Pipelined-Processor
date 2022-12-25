@@ -1,4 +1,4 @@
-module dataMemory #(parameter N=10) (read_enable, write_enable, read_data_buf,
+module dataMemory #(parameter N=7) (read_enable, write_enable, read_data_buf,
 									write_data, clk, rst, read_addr,
 									write_addr);
 

@@ -11,7 +11,8 @@ module pipelinedProcessor(
     // can be removed
     output [15:0] instruction,
     output show_1bit,
-    output [15:0] show);
+    output [15:0] show
+);
 
 
     wire [15:0] memory_data_output;
@@ -50,6 +51,7 @@ module pipelinedProcessor(
     ALU_stage alu_1839(clk, read_data1_buf,
                     read_data2_buf, immediateValue, alu_operation_buf,
                     destination_alu_select_buf, result_buf, result_buf2);
+
     dataMemory dm_1438(mem_read_buf2, mem_write_buf2, memory_data_output,
                         read_data2_buf2, clk, 0/*rst*/, result_buf/*address come from alu*/,
                         result_buf);
