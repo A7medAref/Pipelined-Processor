@@ -28,6 +28,8 @@ wire [2:0] reg1, reg2, opcode;
 // wire[7:0] immediateValue;
 ///////////////////////////
 // To be simple to use
+// opcode   src     dst     immediate_value
+// 000      000     000     1234567
 assign opcode = instruction[15:13];
 assign reg1 = instruction[12:10];
 assign reg2 = instruction[9:7];

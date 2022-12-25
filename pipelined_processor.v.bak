@@ -1,0 +1,30 @@
+module pipelined_processor(
+    input clk;
+    input reset; /*For reseting all registers*/
+);
+    wire [2:0] write_addr;
+    wire [15:0] write_data, instruction;
+    wire write_en;
+    wire[7:0] immediateValue;
+    wire mem_read_buf, mem_write_buf;
+    wire[1:0] alu_operation_buf;
+    wire [15:0] read_data1_buf, read_data2_buf;
+    wire wb_buf, destination_alu_select_buf;
+
+    module decodingStage(
+	clk,
+    reset,
+	write_addr,
+	write_data,
+	instruction,
+	write_en,
+    immediateValue,
+    mem_read_buf,
+    mem_write_buf,
+    alu_operation_buf,
+    read_data1_buf,
+    read_data2_buf,
+    wb_buf,
+    destination_alu_select_buf);
+
+endmodule
