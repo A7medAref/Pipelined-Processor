@@ -13,7 +13,7 @@ module control_unit(
     output reg mem_write_buf2,
     output reg mem_read_buf3,
     
-    output reg[2:0] alu_operation_buf,
+    output reg[3:0] alu_operation_buf,
     output reg wb_buf,
     output reg wb_buf2,
     output reg wb_buf3,
@@ -24,7 +24,8 @@ module control_unit(
     output reg in_port_signal,
     output reg out_port_signal,
     output reg immediate_signal,
-    output reg[2:0] jump_type_signal
+    output reg[2:0] jump_type_signal,
+    output reg oneOperand
 );
 
     always @(negedge clk) begin
@@ -43,6 +44,11 @@ module control_unit(
         destination_alu_select_buf = destination_alu_select;
     end
 
+    wire isNot, isInc, isDec;
+    assign isNot = (opcode == 3);
+    assign isInc = (opcode == 4);
+    assign isDec = (opcode == 5);
+
     always @(posedge clk) begin 
         // calculating the values of the current instruction stage.        
         mem_read = 0;
@@ -55,15 +61,17 @@ module control_unit(
         immediate_signal = 0;
         jump_type_signal = 0;
 
+        oneOperand = (isNot | isInc | isDec) ? 1 : 0;
+
         if (opcode == 1) // SETC
             alu_operation = 11;
         else if(opcode == 2) // CLRC
             alu_operation = 12;
-        else if(opcode == 3) // NOT
+        else if(isNot) // NOT
             alu_operation = 1;
-        else if(opcode == 4) // INC
+        else if(isInc) // INC
             alu_operation = 2;
-        else if(opcode == 5) // DEC
+        else if(isDec) // DEC
             alu_operation = 3;
         else if(opcode == 6) // IN
             in_port_signal = 1;

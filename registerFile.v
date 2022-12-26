@@ -30,7 +30,7 @@ module reg_file (
     always @(posedge clk) begin
         if(reg_write) begin
             data[write_addr] = write_data;
-            $display("data written at that moment %b ,data is %d ,data stored is %d", write_addr, write_data, data[write_addr]);
+            $display("data written at that register %d ,data is %d ,data stored is %d", write_addr, write_data, data[write_addr]);
         end
     end
 

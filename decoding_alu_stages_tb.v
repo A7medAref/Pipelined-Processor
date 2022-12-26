@@ -31,23 +31,23 @@ module aa_pipe_tb;
         clk=1;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b010_001_010_0111111; // STD
+        write_data_fm=16'b11001_001_010_11111; // Add R1, R2
         
         #100 rst_fm=0;
         
         #100 write_enable_fm=1;
         
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b011_001_010_0111111; // ADD
+        write_data_fm=16'b01100_011_100_11111; // Std r3, r4
         
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b100_011_000_0111101; // NOT
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b101_100_1110111111; // NOP
+        write_data_fm=16'b00011_r7_001_11101; // NOT
 
         // #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b001_010_111_0111111; // LDD
+        // write_data_fm=16'b101_100_1110111111; // NOP
+
+        // // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b001_010_111_0111111; // LDD
 
         #100
         reset = 1;

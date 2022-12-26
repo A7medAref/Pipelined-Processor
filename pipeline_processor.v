@@ -25,7 +25,7 @@ module pipelinedProcessor(
     wire [15:0] read_data2_buf;
     wire [15:0] read_data2_buf2;
     wire [15:0] immediateValue;
-    wire [2:0] alu_operation_buf;
+    wire [3:0] alu_operation_buf;
     wire destination_alu_select_buf;
     wire wb_buf, wb_buf2, wb_buf3;
 

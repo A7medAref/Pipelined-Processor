@@ -33,7 +33,8 @@ module decodingStage(
     );
 
 // Just to remove warning
-wire [2:0] reg1, reg2, opcode;
+wire [2:0] reg1, reg2;
+wire [4:0] opcode;
 // wire[7:0] immediateValue;
 ///////////////////////////
 // To be simple to use
@@ -51,12 +52,12 @@ wire mem_read, mem_write;
 wire[3:0] alu_operation;
 // alu_operation_buf;
 wire wb, destination_alu_select;
-// wb_buf, destination_alu_select_buf
+wire oneOperand;
 
 wire [15:0] read_data2_buf2;
 
 // Register file that contains the registers
-reg_file rf(clk, reset/*For testing purpses*/, alu_operation, mem_write, reg1, reg2, read_data2_buf2,
+reg_file rf(clk, reset/*For testing purpses*/, oneOperand, mem_write, reg1, reg2, read_data2_buf2,
 			write_data, wb_buf3, read_data1, read_data2, read_data2_buf, read_data2_buf2);
 
 // The control unite responsible for generating the signals
@@ -84,6 +85,8 @@ control_unit cu(
     in_port_signal,
     out_port_signal,
     immediate_signal,
-    jump_type_signal
+    jump_type_signal,
+    oneOperand
+
 );
 endmodule
