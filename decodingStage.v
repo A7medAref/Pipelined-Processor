@@ -29,7 +29,8 @@ module decodingStage(
     output in_port_signal,
     output out_port_signal,
     output immediate_signal,
-    output[1:0] jump_type_signal
+    output[1:0] jump_type_signal,
+    input jump_occured
     );
 
 // Just to remove warning
@@ -84,6 +85,7 @@ control_unit cu(
     out_port_signal,
     immediate_signal,
     oneOperand,
-    jump_type_signal
+    jump_type_signal,
+    jump_occured
 );
 endmodule

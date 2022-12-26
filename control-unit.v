@@ -25,7 +25,8 @@ module control_unit(
     output reg out_port_signal,
     output reg immediate_signal,
     output reg oneOperand,
-    output reg[1:0] jump_type_signal
+    output reg[1:0] jump_type_signal,
+    input jump_occured
 );
 
     always @(negedge clk) begin
@@ -37,10 +38,10 @@ module control_unit(
         wb_buf2 = wb_buf;
         
         mem_read_buf = mem_read;
-        mem_write_buf = mem_write;
+        mem_write_buf = mem_write & !jump_occured;
 
         alu_operation_buf = alu_operation;
-        wb_buf = wb;
+        wb_buf = wb & !jump_occured;
         destination_alu_select_buf = destination_alu_select;
     end
 
@@ -117,6 +118,9 @@ module control_unit(
             jump_type_signal = 2;
         else if(opcode == 18) // JC
             jump_type_signal = 3;
+
+        // FLUSHING
+        mem_write = jump_occured ? 0 : mem_write;
         // The next command would be NOP if jump by default
         
         // TODO: CALL , RET , RETI will be implemented
@@ -124,8 +128,8 @@ module control_unit(
 
         // may be change if we added mem_read to signal that doesn't write back
         wb = (alu_operation != 0 || mem_read) & !mem_write 
-        & alu_operation !=11 & alu_operation != 12;
-        
+        & alu_operation !=11 & alu_operation != 12 & !jump_occured;
+
 
     end
 endmodule
