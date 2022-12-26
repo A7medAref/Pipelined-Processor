@@ -28,7 +28,10 @@ always@(negedge clk)begin
 	pc=32'b0100000;
 	if(!write_enable && !rst) begin
 	  	if(jump_occured)
-			pc={0,jump_to};
+			begin
+			  	$display("jumping to %d", jump_to);
+				pc={0,jump_to};
+			end
 		else
 			pc=pc+1;
 	end

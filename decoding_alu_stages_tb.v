@@ -31,12 +31,16 @@ module aa_pipe_tb;
         clk=1;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b11001_001_010_11111; // Add R1, R2
+        // write_data_fm=16'b11001_001_010_11111; // Add R1, R2
+        write_data_fm=16'b00001_001_010_11111; // SETC
         
         #100 rst_fm=0;
         
         #100 write_enable_fm=1;
         
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b10010_111_010_11111; // jump r3
+
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b01100_011_100_11111; // Std r3, r4
         
@@ -46,11 +50,11 @@ module aa_pipe_tb;
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b00011_111_001_11101; // NOT r7
 
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00000_01110111111; // NOP
-
         // #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00100_0_111_0111111; // LDD
+        // write_data_fm=16'b00000_01110111111; // NOP
+
+        // // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b00100_0_111_0111111; // LDD
 
         #100
         reset = 1;

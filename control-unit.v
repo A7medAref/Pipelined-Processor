@@ -59,6 +59,7 @@ module control_unit(
         in_port_signal = 0;
         out_port_signal = 0;
         immediate_signal = 0;
+        jump_type_signal = 0;
 
         oneOperand = (isNot | isInc | isDec) ? 1 : 0;
 
@@ -122,7 +123,8 @@ module control_unit(
 
 
         // may be change if we added mem_read to signal that doesn't write back
-        wb = (alu_operation != 0 || mem_read) & !mem_write;
+        wb = (alu_operation != 0 || mem_read) & !mem_write 
+        & alu_operation !=11 & alu_operation != 12;
         
 
     end

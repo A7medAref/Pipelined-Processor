@@ -45,7 +45,7 @@ module pipelinedProcessor(
 
     wire[15:0] jump_to;
 
-    fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm, jump_occured, read_data1_buf2);
+    fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm, jump_occured, read_data1_buf);
 
     decodingStage ds_1331(
         clk,

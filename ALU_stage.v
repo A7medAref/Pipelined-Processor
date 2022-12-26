@@ -34,7 +34,7 @@ module ALU_stage (
         result = out;
         flags = {carry , zero , neg};
         jump_occured = (jump_type_signal == 1 && flags_buffered[1]) ||
-        (jump_type_signal == 2 && flags_buffered[2])||
-        (jump_type_signal == 3 && flags_buffered[0]);
+        (jump_type_signal == 2 && flags_buffered[0])||
+        (jump_type_signal == 3 && flags_buffered[2]);
     end
 endmodule
