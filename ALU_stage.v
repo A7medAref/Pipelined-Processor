@@ -1,5 +1,5 @@
 module ALU_stage (input clk, input[15:0] register_content1,
-                input[15:0] register_content2, input[7:0] immediate_value, input[2:0] alu_control_signal,
+                input[15:0] register_content2, input[7:0] immediate_value, input[3:0] alu_control_signal,
                 input alu_src_signal, output reg[15:0] result_buf, output reg[15:0] result_buf2);
 
     wire carry, zero, neg;

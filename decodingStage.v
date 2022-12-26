@@ -16,21 +16,30 @@ module decodingStage(
     output [15:0] read_data2_buf,
 
     output [15:0] immediateValue, 
-    output [2:0] alu_operation_buf,
+    output [3:0] alu_operation_buf,
     output destination_alu_select_buf,
     
     output wb_buf,
     output wb_buf2,
-    output wb_buf3);
+    output wb_buf3,
+
+    output push_signal,
+    output pop_signal,
+    output in_port_signal,
+    output out_port_signal,
+    output immediate_signal,
+    output [2:0] jump_type_signal
+
+    );
 
 // Just to remove warning
 wire [2:0] reg1, reg2, opcode;
 // wire[7:0] immediateValue;
 ///////////////////////////
 // To be simple to use
-assign opcode = instruction[15:13];
-assign reg1 = instruction[12:10];
-assign reg2 = instruction[9:7];
+assign opcode = instruction[15:11];
+assign reg1 = instruction[10:8];
+assign reg2 = instruction[7:5];
 
 // assumsion
 assign immediateValue = instruction[7:0];
@@ -39,7 +48,7 @@ assign immediateValue = instruction[7:0];
 wire mem_read, mem_write;
 //--mem_read_buf, mem_write_buf;
 
-wire[2:0] alu_operation;
+wire[3:0] alu_operation;
 // alu_operation_buf;
 wire wb, destination_alu_select;
 // wb_buf, destination_alu_select_buf
@@ -68,6 +77,13 @@ control_unit cu(
     wb_buf,
     wb_buf2,
     wb_buf3,
-    destination_alu_select_buf
+    destination_alu_select_buf,
+    
+    push_signal,
+    pop_signal,
+    in_port_signal,
+    out_port_signal,
+    immediate_signal,
+    jump_type_signal
 );
 endmodule

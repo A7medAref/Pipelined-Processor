@@ -29,12 +29,23 @@ module pipelinedProcessor(
     wire destination_alu_select_buf;
     wire wb_buf, wb_buf2, wb_buf3;
 
+    ///////////////////
+    wire push_signal;
+    wire pop_signal;
+    wire in_port_signal;
+    wire out_port_signal;
+    wire immediate_signal;
+    wire [2:0] jump_type_signal;
+    ////////////////////
+
     // testing
     assign show = result_buf;
     assign show_1bit = alu_operation_buf;
 
+    wire jump_signal;
+    wire[15:0] jump_to;
 
-    fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm);
+    fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm, jump_signal, jump_to);
 
     decodingStage ds_1331(
         clk, reset, write_addr, wb_output, instruction,
@@ -45,7 +56,7 @@ module pipelinedProcessor(
 
         immediateValue, alu_operation_buf, destination_alu_select_buf,
 
-        wb_buf, wb_buf2, wb_buf3
+        wb_buf, wb_buf2, wb_buf3, push_signal, pop_signal, in_port_signal, out_port_signal, immediate_signal, jump_type_signal
         );
 
     ALU_stage alu_1839(clk, read_data1_buf,
