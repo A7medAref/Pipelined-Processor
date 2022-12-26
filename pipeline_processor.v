@@ -29,15 +29,14 @@ module pipelinedProcessor(
     wire destination_alu_select_buf;
     wire wb_buf, wb_buf2, wb_buf3;
 
-    ///////////////////
+    /////////////////// should be inputs for the next stage
     wire push_signal;
     wire pop_signal;
     wire in_port_signal;
     wire out_port_signal;
     wire immediate_signal;
-    wire [2:0] jump_type_signal;
     ////////////////////
-
+    wire[1:0] jump_type_signal;
     // testing
     assign show = result_buf;
     assign show_1bit = alu_operation_buf;
@@ -48,20 +47,48 @@ module pipelinedProcessor(
     fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm, jump_signal, jump_to);
 
     decodingStage ds_1331(
-        clk, reset, write_addr, wb_output, instruction,
+        clk,
+        reset,
+        write_addr,
+        wb_output,
+        instruction,
         
         // Needs another buffering
-        mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3, read_data1_buf, read_data2_buf, read_data2_buf2,
+        mem_read_buf,
+        mem_write_buf,
+        mem_read_buf2,
+        mem_write_buf2,
+        mem_read_buf3,
+        read_data1_buf,
+        read_data2_buf,
+        read_data2_buf2,
         /////////////////////
 
-        immediateValue, alu_operation_buf, destination_alu_select_buf,
+        immediateValue,
+        alu_operation_buf,
+        destination_alu_select_buf,
+        wb_buf,
+        wb_buf2,
+        wb_buf3,
+        //////////////////////// new signals phase 2
+        push_signal,
+        pop_signal,
+        in_port_signal,
+        out_port_signal,
+        immediate_signal,
 
-        wb_buf, wb_buf2, wb_buf3, push_signal, pop_signal, in_port_signal, out_port_signal, immediate_signal, jump_type_signal
+        jump_type_signal
         );
 
-    ALU_stage alu_1839(clk, read_data1_buf,
-                    read_data2_buf, immediateValue, alu_operation_buf,
-                    destination_alu_select_buf, result_buf, result_buf2);
+    ALU_stage alu_1839(clk,
+                        read_data1_buf,
+                        read_data2_buf,
+                        immediateValue, 
+                        alu_operation_buf,
+                        destination_alu_select_buf,
+                        result_buf,
+                        result_buf2,
+                        );
 
     dataMemory dm_1438(mem_read_buf2, mem_write_buf2, memory_data_output,
                         read_data2_buf2, clk, 0/*rst*/, result_buf/*address come from alu*/,

@@ -1,5 +1,5 @@
 module ALU#(parameter N=16) (input[N-1:0] in_src, input[N-1:0] in_dst, input[3:0] controlSignal, 
-            output[N-1:0] out, output carryFlag, output zeroFlag, output negFlag);
+            output[N-1:0] out, output carryFlag, output zeroFlag, output negFlag, input[2:0] flags);
     wire is_alu;
     assign {carryFlag, out} = (controlSignal == 1) ? {0, ~in_src} :
                               (controlSignal == 2) ? (in_src + 1) :

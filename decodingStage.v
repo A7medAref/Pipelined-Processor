@@ -28,8 +28,7 @@ module decodingStage(
     output in_port_signal,
     output out_port_signal,
     output immediate_signal,
-    output [2:0] jump_type_signal
-
+    output[1:0] jump_type_signal,
     );
 
 // Just to remove warning
@@ -47,10 +46,8 @@ assign immediateValue = instruction[7:0];
 ///////////////////////////
 
 wire mem_read, mem_write;
-//--mem_read_buf, mem_write_buf;
 
 wire[3:0] alu_operation;
-// alu_operation_buf;
 wire wb, destination_alu_select;
 wire oneOperand;
 
@@ -85,8 +82,7 @@ control_unit cu(
     in_port_signal,
     out_port_signal,
     immediate_signal,
-    jump_type_signal,
-    oneOperand
-
+    oneOperand,
+    jump_type_signal
 );
 endmodule

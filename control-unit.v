@@ -24,8 +24,8 @@ module control_unit(
     output reg in_port_signal,
     output reg out_port_signal,
     output reg immediate_signal,
-    output reg[2:0] jump_type_signal,
-    output reg oneOperand
+    output reg oneOperand,
+    output reg[1:0] jump_type_signal
 );
 
     always @(negedge clk) begin
@@ -59,7 +59,6 @@ module control_unit(
         in_port_signal = 0;
         out_port_signal = 0;
         immediate_signal = 0;
-        jump_type_signal = 0;
 
         oneOperand = (isNot | isInc | isDec) ? 1 : 0;
 
@@ -112,20 +111,19 @@ module control_unit(
             immediate_signal = 1;
         end
         else if(opcode == 16) // JZ
-            jump_type_signal = 2;
-        else if(opcode == 17) // JN
-            jump_type_signal = 3;
-        else if(opcode == 18) // JC
-            jump_type_signal = 4;
-        else if(opcode == 19) // JMP
             jump_type_signal = 1;
-        // CALL , RET , RETI will be implemented
+        else if(opcode == 17) // JN
+            jump_type_signal = 2;
+        else if(opcode == 18) // JC
+            jump_type_signal = 3;
+        // The next command would be NOP if jump by default
+        
+        // TODO: CALL , RET , RETI will be implemented
 
 
         // may be change if we added mem_read to signal that doesn't write back
-        wb = (alu_operation != 0 || mem_read) & !jump_type_signal & !mem_write;
-
-
+        wb = (alu_operation != 0 || mem_read) & !mem_write;
+        
 
     end
 endmodule
