@@ -17,7 +17,9 @@ module pipelinedProcessor(
 
     wire [15:0] memory_data_output;
     wire [15:0] result_buf;
-    wire [15:0] result_buf2;    
+    wire [15:0] result_buf2;
+    wire [2:0] CCR_buf1;
+    wire [2:0] CCR_buf2; 
     
     wire mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3;
     
@@ -61,7 +63,7 @@ module pipelinedProcessor(
 
     ALU_stage alu_1839(clk, read_data1_buf,
                     read_data2_buf, immediateValue, alu_operation_buf,
-                    destination_alu_select_buf, result_buf, result_buf2);
+                    destination_alu_select_buf, result_buf, result_buf2 , CCR_buf1, CCR_buf2);
 
     dataMemory dm_1438(mem_read_buf2, mem_write_buf2, memory_data_output,
                         read_data2_buf2, clk, 0/*rst*/, result_buf/*address come from alu*/,

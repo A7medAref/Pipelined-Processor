@@ -28,9 +28,10 @@ module decodingStage(
     output in_port_signal,
     output out_port_signal,
     output immediate_signal,
-    output [2:0] jump_type_signal
-
-    );
+    output [2:0] jump_type_signal,
+    input [2:0] CCR,
+    
+);
 
 // Just to remove warning
 wire [2:0] reg1, reg2;
@@ -60,6 +61,7 @@ wire [15:0] read_data2_buf2;
 reg_file rf(clk, reset/*For testing purpses*/, oneOperand, mem_write, reg1, reg2, read_data2_buf2,
 			write_data, wb_buf3, read_data1, read_data2, read_data2_buf, read_data2_buf2);
 
+jump_detection_unit jdu(jump_type_signal)
 // The control unite responsible for generating the signals
 control_unit cu(
     clk,
