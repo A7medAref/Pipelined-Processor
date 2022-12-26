@@ -1,9 +1,9 @@
 module control_unit(
     input clk,
-    input[2:0] opcode,
+    input[4:0] opcode,
     output reg mem_read,
     output reg mem_write,
-    output reg[2:0] alu_operation,
+    output reg[3:0] alu_operation,
     output reg wb,
     output reg destination_alu_select,
     
@@ -17,7 +17,13 @@ module control_unit(
     output reg wb_buf,
     output reg wb_buf2,
     output reg wb_buf3,
-    output reg destination_alu_select_buf
+    output reg destination_alu_select_buf,
+    output reg push_signal,
+    output reg pop_signal,
+    output reg in_port_signal,
+    output reg out_port_signal,
+    output reg immediate_signal,
+    output reg[2:0] jump_type_signal
 );
 
     always @(negedge clk) begin
@@ -38,21 +44,75 @@ module control_unit(
 
     always @(posedge clk) begin 
         // calculating the values of the current instruction stage.        
-        mem_write = (opcode == 2); // store
-        alu_operation = (opcode == 3 /*add*/) ? 0 :
-                        (opcode == 2 /*std*/) ? 3 :
-                        (opcode == 4 /*not*/) ? 1 : 4 /*NOP*/;
-        
-        if (opcode == 1) begin
+        mem_read = 0;
+        mem_write = 0;
+        alu_operation = 0;
+        push_signal = 0;
+        pop_signal = 0;
+        in_port_signal = 0;
+        out_port_signal = 0;
+        immediate_signal = 0;
+        jump_type_signal = 0;
+
+        if (opcode == 1) // SETC
+            alu_operation = 11;
+        else if(opcode == 2) // CLRC
+            alu_operation = 12;
+        else if(opcode == 3) // NOT
+            alu_operation = 1;
+        else if(opcode == 4) // INC
+            alu_operation = 2;
+        else if(opcode == 5) // DEC
+            alu_operation = 3;
+        else if(opcode == 6) // IN
+            in_port_signal = 1;
+        else if(opcode == 7) // OUT
+            out_port_signal = 1;
+        else if(opcode == 8) // PUSH
+            push_signal = 1;
+        else if(opcode == 9) // POP
+            pop_signal = 1;
+        else if(opcode == 10) // LOAD
             mem_read = 1;
-            alu_operation = 2; /*pass the destination as a result*/
-            destination_alu_select = 1;
-        end else begin
-            mem_read = 0;
-            destination_alu_select = 0;
+        else if(opcode == 12) // STORE
+            mem_write = 1;
+        else if(opcode == 13) begin // LOAD_IMMEDIATE
+            mem_read = 1;
+            immediate_signal = 1;
         end
+        else if(opcode == 24) // MOV
+            alu_operation = 4; 
+        else if(opcode == 25) // ADD
+            alu_operation = 5;
+        else if(opcode == 26) // SUB
+            alu_operation = 6;
+        else if(opcode == 28) // AND
+            alu_operation = 7;
+        else if(opcode == 29) // OR
+            alu_operation = 8;
+        else if(opcode == 30) begin // SHL
+            alu_operation = 9;
+            immediate_signal = 1;
+        end
+        else if(opcode == 31) begin // SHR
+            alu_operation = 10;
+            immediate_signal = 1;
+        end
+        else if(opcode == 16) // JZ
+            jump_type_signal = 2;
+        else if(opcode == 17) // JN
+            jump_type_signal = 3;
+        else if(opcode == 18) // JC
+            jump_type_signal = 4;
+        else if(opcode == 19) // JMP
+            jump_type_signal = 1;
+        // CALL , RET , RETI will be implemented
+
+
+        // may be change if we added mem_read to signal that doesn't write back
+        wb = alu_operation != 0 || mem_read; 
+
 
         
-        wb = (opcode == 1 || opcode == 3 || opcode == 4);
     end
 endmodule
