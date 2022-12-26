@@ -41,7 +41,7 @@ module aa_pipe_tb;
         write_data_fm=16'b01100_011_100_11111; // Std r3, r4
         
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00011_r7_001_11101; // NOT
+        write_data_fm=16'b00011_111_001_11101; // NOT r7
 
         // #100 write_addr_fm=write_addr_fm+1;
         // write_data_fm=16'b101_100_1110111111; // NOP
