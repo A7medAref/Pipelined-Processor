@@ -1,7 +1,7 @@
 module Testing;
     localparam W = 16;
     reg [15:0] in1, in2;
-    reg [1:0] controlSignal;
+    reg [3:0] controlSignal;
     wire [15:0] result;
 
     wire carry, zero, neg;
