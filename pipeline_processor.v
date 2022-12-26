@@ -29,6 +29,8 @@ module pipelinedProcessor(
     wire [3:0] alu_operation_buf;
     wire destination_alu_select_buf;
     wire wb_buf, wb_buf2, wb_buf3;
+    wire reg1_buf1, reg1_buf2;
+    wire reg2_buf1, reg2_buf2;
 
     /////////////////// should be inputs for the next stage
     wire push_signal;
@@ -44,6 +46,8 @@ module pipelinedProcessor(
     assign show_1bit = alu_operation_buf;
 
     wire[15:0] jump_to;
+    wire[15:0] register1_content, register2_content;
+    wire[1:0] alu_input1_selection, alu_input2_selection;
 
     fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm, jump_occured, read_data1_buf2);
 
@@ -79,20 +83,51 @@ module pipelinedProcessor(
         out_port_signal,
         immediate_signal,
 
-        jump_type_signal
+        jump_type_signal,
+
+        reg1_buf1,
+        reg1_buf2,
+        reg2_buf1,
+        reg2_buf2
         );
 
-    ALU_stage alu_1839(clk,
-                        read_data1_buf,
-                        read_data2_buf,
-                        immediateValue, 
-                        alu_operation_buf,
-                        destination_alu_select_buf,
-                        result_buf,
-                        result_buf2,
-                        jump_type_signal,
-                        jump_occured
-                        );
+    forwardingUnit fu(
+        clk,
+        wb_buf,
+        wb_buf1,
+        instruction[7:5],
+        instruction[10:8],
+        reg1_buf1,
+        reg1_buf2,
+        alu_input1_selection,
+        alu_input2_selection
+    );
+
+    aluInputSelection ais(
+        clk,
+        alu_input1_selection,
+        alu_input2_selection,
+        result_buf,
+        result_buf2,
+        read_data1_buf,
+        read_data2_buf,
+        register1_content,
+        register2_content
+    );
+    
+    ALU_stage alu_1839
+    (
+        clk,
+        register1_content,
+        register2_content,
+        immediateValue, 
+        alu_operation_buf,
+        destination_alu_select_buf,
+        result_buf,
+        result_buf2,
+        jump_type_signal,
+        jump_occured
+    );
 
     dataMemory dm_1438(mem_read_buf2, mem_write_buf2, memory_data_output,
                         read_data2_buf2, clk, 0/*rst*/, result_buf/*address come from alu*/,

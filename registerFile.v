@@ -12,7 +12,11 @@ module reg_file (
     output reg[15:0] read_data1_buf,
 	output reg[15:0] read_data2,
 	output reg[15:0] read_data2_buf,
-	output reg[15:0] read_data2_buf2
+	output reg[15:0] read_data2_buf2,
+    output reg[2:0] reg1_buf1,
+    output reg[2:0] reg1_buf2,
+    output reg[2:0] reg2_buf1,
+    output reg[2:0] reg2_buf2
     );
     reg[15:0] data[7:0];
 
@@ -41,6 +45,10 @@ module reg_file (
         read_data2_buf = read_data2;
         read_data1_buf = read_data1;
         read_data1 = data[read_addr1];
+        reg1_buf2 = reg1_buf1;
+        reg1_buf1 = read_addr1;
+        reg2_buf2 = reg2_buf1;
+        reg2_buf1 = read_addr2;
 
         if(mem_write) begin
             read_data1 = data[read_addr2];

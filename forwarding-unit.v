@@ -8,7 +8,7 @@ module forwardingUnit
     input[2:0] buf1_dst,
     input[2:0] buf2_dst,
     output[1:0] alu_input1_selection,
-    output[1:0] alu_input2_selection
+    output[1:0] alu_input2_selection,
 );
     // ins2 => buf2
     // ins1 => buf1

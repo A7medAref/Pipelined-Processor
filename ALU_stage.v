@@ -20,6 +20,8 @@ module ALU_stage (
 
     reg[2:0] flags, flags_buffered;
 
+    
+
     ALU alu_1(register_content1, register_content2, alu_control_signal, out, carry, zero, neg);
 
 
