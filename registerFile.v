@@ -1,7 +1,7 @@
 module reg_file (
     input clk,
     input reset, //for testing purposes.
-    input src_selection,
+    input oneOperand,
     input mem_write,
     input[2:0] read_addr1,
 	input[2:0] read_addr2,
@@ -45,7 +45,7 @@ module reg_file (
             read_data1 = data[read_addr2];
             read_data2 = data[read_addr1];
         end         
-        else if(src_selection == 1)
+        else if(oneOperand == 1)
             read_data2 = read_data1;
         else
             read_data2 = data[read_addr2];

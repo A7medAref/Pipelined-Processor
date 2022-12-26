@@ -81,10 +81,14 @@ module control_unit(
             push_signal = 1;
         else if(opcode == 9) // POP
             pop_signal = 1;
-        else if(opcode == 10) // LOAD
+        else if(opcode == 10) begin // LOAD
             mem_read = 1;
-        else if(opcode == 12) // STORE
+            alu_operation = 13;
+        end
+        else if(opcode == 12) begin // STORE
             mem_write = 1;
+            alu_operation = 13;
+        end
         else if(opcode == 13) begin // LOAD_IMMEDIATE
             mem_read = 1;
             immediate_signal = 1;
@@ -119,7 +123,7 @@ module control_unit(
 
 
         // may be change if we added mem_read to signal that doesn't write back
-        wb = alu_operation != 0 || mem_read; 
+        wb = (alu_operation != 0 || mem_read) & !jump_type_signal & !mem_write;
 
 
 

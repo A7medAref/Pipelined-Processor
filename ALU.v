@@ -13,8 +13,8 @@ module ALU#(parameter N=16) (input[N-1:0] in_src, input[N-1:0] in_dst, input[3:0
                               (controlSignal == 10) ? (in_src) :// TODO: need immediate value
                               (controlSignal == 11) ? {1 , out} :
                               (controlSignal == 12) ? {0 , out} :
-                              (controlSignal == 13) ? {carryFlag , in_src} : // TODO: control signal hasn't been sent
-                              (controlSignal == 14) ? {carryFlag , in_src} : {carryFlag, out}; // TODO: control signal hasn't been sent
+                              (controlSignal == 13) ? {carryFlag , in_src} : // STD or load
+                              {carryFlag, out}; // NOP
 // 2=ldd , 3=std,==> pass in_src
     
     assign is_alu = !(controlSignal == 4 || controlSignal >= 13);
