@@ -10,7 +10,8 @@ module ALU_stage (
     input alu_src_signal, 
     output reg[15:0] result_buf, 
     output reg[15:0] result_buf2 ,   
-    
+    input[1:0] jump_type_signal,
+    output reg jump_occured 
 );
 
     wire carry, zero, neg;
@@ -19,7 +20,8 @@ module ALU_stage (
 
     reg[2:0] flags, flags_buffered;
 
-    ALU alu_1(register_content1, register_content2, alu_control_signal, out, carry, zero, neg, flags_buffered);
+    ALU alu_1(register_content1, register_content2, alu_control_signal, out, carry, zero, neg);
+
 
     always @(negedge clk) begin
         // Buffering
@@ -31,5 +33,8 @@ module ALU_stage (
     always @(posedge clk) begin
         result = out;
         flags = {carry , zero , neg};
+        jump_occured = (jump_type_signal == 1 && flags_buffered[1]) ||
+        (jump_type_signal == 2 && flags_buffered[2])||
+        (jump_type_signal == 3 && flags_buffered[0]);
     end
 endmodule

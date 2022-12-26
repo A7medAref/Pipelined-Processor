@@ -22,6 +22,7 @@ module pipelinedProcessor(
     wire mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3;
     
     wire [15:0] read_data1_buf;
+    wire [15:0] read_data1_buf2;
     wire [15:0] read_data2_buf;
     wire [15:0] read_data2_buf2;
     wire [15:0] immediateValue;
@@ -37,14 +38,14 @@ module pipelinedProcessor(
     wire immediate_signal;
     ////////////////////
     wire[1:0] jump_type_signal;
+    wire jump_occured;
     // testing
     assign show = result_buf;
     assign show_1bit = alu_operation_buf;
 
-    wire jump_signal;
     wire[15:0] jump_to;
 
-    fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm, jump_signal, jump_to);
+    fetchInstructionModule fim_45185(write_enable_fm, instruction, write_data_fm, clk, rst_fm, write_addr_fm, jump_occured, read_data1_buf2);
 
     decodingStage ds_1331(
         clk,
@@ -60,6 +61,7 @@ module pipelinedProcessor(
         mem_write_buf2,
         mem_read_buf3,
         read_data1_buf,
+        read_data1_buf2,
         read_data2_buf,
         read_data2_buf2,
         /////////////////////
@@ -88,6 +90,8 @@ module pipelinedProcessor(
                         destination_alu_select_buf,
                         result_buf,
                         result_buf2,
+                        jump_type_signal,
+                        jump_occured
                         );
 
     dataMemory dm_1438(mem_read_buf2, mem_write_buf2, memory_data_output,
