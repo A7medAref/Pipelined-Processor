@@ -48,6 +48,9 @@ module Testing;
         controlSignal = 11;
         #50;
         controlSignal = 12;
+        #50;
+        controlSignal = 2;
+        in1 = 16'b1111111111111110;
 
     end
 endmodule
