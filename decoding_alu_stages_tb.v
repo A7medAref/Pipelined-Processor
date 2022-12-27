@@ -60,7 +60,10 @@ module aa_pipe_tb;
         write_data_fm=16'b00000_01110111111; // NOP
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b11001_001_010_11111; // Add R1, R2
+        write_data_fm=16'b11001_010_001_11111; // Add R1, R2
+        
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00011_111_001_11101; // Not r7
 
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b01110_110_010_11111; // ldm R1, 

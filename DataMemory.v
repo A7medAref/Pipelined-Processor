@@ -1,11 +1,11 @@
-module dataMemory #(parameter N=7) (read_enable, write_enable, read_data_buf,
+module dataMemory #(parameter N=10) (read_enable, write_enable, memory_data_output,
 									write_data, clk, rst, read_addr,
 									write_addr);
 
 input read_enable,write_enable,clk,rst;
 input[15:0] write_data;
-input[2:0] read_addr,write_addr;
-output reg [15:0] read_data_buf;
+input[15:0] read_addr,write_addr;
+output reg [15:0] memory_data_output;
 reg [15:0] read_data;
 reg[15:0]regs[(1<<N)-1:0];
 integer i;
@@ -28,7 +28,7 @@ end
 end
 
 always@(negedge clk)begin
-	read_data_buf = read_data;
+	memory_data_output = read_data;
 end
 
 endmodule
