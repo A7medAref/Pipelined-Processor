@@ -50,7 +50,7 @@ module pipelinedProcessor(
                                     rst_fm, 
                                     write_addr_fm, 
                                     jump_occured, 
-                                    read_data1_buf);
+                                    read_data1_buf2);
 
     decodingStage ds_1331(
         clk,
