@@ -1,0 +1,56 @@
+        write_addr_fm=32'b0000_0000_0000_0010_0000;
+        write_data_fm=16'b01110_001_010_11111; // ldm R1, 
+
+        #100 rst_fm=0;
+        
+        #100 write_enable_fm=1;
+
+        
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=36; 
+        
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00000_01110111111; // NOP
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00000_01110111111; // NOP
+
+                
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00011_111_001_11101; // NOT r7
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01100_001_100_11111; // Std r1, r4
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00000_01110111111; // NOP
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00000_01110111111; // NOP
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00001_001_010_11111; // SETC
+        
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b10010_001_010_11111; // jump r3
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01100_011_100_11111; // Std r3, r4
+        
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00011_111_001_11101; // NOT r7
+
+//////////////////////////////////////////////////////
+
+        write_data_fm=16'b11001_001_010_11111; // Add r1, r2
+
+        #100 rst_fm=0;
+
+        #100 write_enable_fm=1;        
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b11001_111_110_11111; // add r7, r6
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b11001_110_010_11111; // add r6, r2
+        // write_data_fm=16'b01100_011_100_11111; // Std r6, r4

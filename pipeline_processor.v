@@ -9,10 +9,8 @@ module pipelinedProcessor(
     input[15:0] write_data_fm,
     input[31:0] write_addr_fm,
     // can be removed
-    output [15:0] instruction,
-    output show_1bit,
-    output [15:0] show
-);
+    output [15:0] instruction
+    );
 
 
     wire [15:0] memory_data_output;
@@ -37,9 +35,8 @@ module pipelinedProcessor(
     ////////////////////
     wire[1:0] jump_type_signal;
     wire jump_occured;
-    // testing
-    assign show = result_buf;
-    assign show_1bit = alu_operation_buf;
+
+    wire[2:0] reg1_buf1, reg2_buf1 , reg2_buf2, reg2_buf3;
 
     wire[15:0] jump_to;
 
@@ -82,8 +79,14 @@ module pipelinedProcessor(
         in_port_signal,
         out_port_signal,
         jump_type_signal,
-        jump_occured
+        jump_occured,
+        reg1_buf1,
+        reg2_buf1,
+        reg2_buf2,
+        reg2_buf3
         );
+
+    
 
     ALU_stage alu_1839( clk,
                         read_data1_buf,
@@ -94,7 +97,15 @@ module pipelinedProcessor(
                         result_buf2,
                         jump_type_signal,
                         jump_occured,
-                        instruction
+                        instruction,
+                        wb_buf2,
+                        wb_buf3,
+                        reg1_buf1,
+                        reg2_buf1,
+                        reg2_buf2,
+                        reg2_buf3,
+                        memory_data_output,
+                        mem_read_buf3
                         );
 
     dataMemory dm_1438(mem_read_buf2, 

@@ -28,7 +28,11 @@ module decodingStage(
     output in_port_signal,
     output out_port_signal,
     output[1:0] jump_type_signal,
-    input jump_occured
+    input jump_occured,
+    output[2:0] reg1_buf1,
+    output[2:0] reg2_buf1,
+    output[2:0] reg2_buf2,
+    output[2:0] reg2_buf3
     );
 
 // Just to remove warning
@@ -63,7 +67,12 @@ reg_file rf(clk,
             read_data2, 
             read_data2_buf, 
             read_data2_buf2,
-            opcode);
+            opcode,
+            reg1_buf1,
+            reg2_buf1,
+            reg2_buf2,
+            reg2_buf3
+            );
 
 // The control unite responsible for generating the signals
 control_unit cu(

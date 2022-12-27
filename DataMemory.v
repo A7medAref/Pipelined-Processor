@@ -18,11 +18,11 @@ always@(posedge clk)begin
 	end else begin
 		if(write_enable)begin
 			regs[write_addr]=write_data;
-			$display("writting happend in %b with value %b",write_addr, regs[write_addr]);
+			$display("writting happend in %d with value %d",write_addr, regs[write_addr]);
 		end
 		if(read_enable)begin
 			read_data=regs[read_addr];
-			$display("data read from memory at %b with value= %b",read_addr, read_data);
+			$display("data read from memory at %d with value= %d",read_addr, read_data);
 		end
 end
 end

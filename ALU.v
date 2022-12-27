@@ -1,13 +1,34 @@
-module ALU#(parameter N=16) (input[N-1:0] in_src, 
-                            input[N-1:0] in_dst, 
+module ALU#(parameter N=16) (input[N-1:0] new_src, 
+                            input[N-1:0] new_dst, 
                             input[3:0] controlSignal, 
                             output[N-1:0] out, 
                             output carryFlag, 
                             output zeroFlag, 
                             output negFlag,     
-                            input[15:0] instruction
-                            );
+                            input[15:0] instruction,
+                            input wb1,
+                            input wb2,
+                            input[N-1:0] result_prev1,
+                            input[N-1:0] result_prev2, // older one
+                            input[2:0] reg1_buf1,
+                            input[2:0] reg2_buf1,
+                            input[2:0] reg2_buf2,
+                            input[2:0] reg2_buf3,
+                            input[15:0] memory_data_output_load_case,
+                            input mem_read_load_case);
+
+    wire[N-1:0] in_src, in_dst;
     
+    assign in_src = (reg1_buf1 === reg2_buf2) ? result_prev1 : 
+                  (reg1_buf1 === reg2_buf3) ?
+                  mem_read_load_case ? memory_data_output_load_case : result_prev2
+                  : new_src;
+
+    assign in_dst = (reg2_buf1 === reg2_buf2) ? result_prev1 : 
+                  (reg2_buf1 === reg2_buf3) ? 
+                  mem_read_load_case ? memory_data_output_load_case : result_prev2
+                  : new_dst;
+
     wire is_alu;
     assign {carryFlag, out} = (controlSignal == 1) ? {0, ~in_src} :
                               (controlSignal == 2) ? (in_src + 1) :

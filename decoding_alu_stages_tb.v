@@ -8,9 +8,6 @@ module aa_pipe_tb;
     reg[15:0] write_data_fm;
     reg write_enable_fm;
     wire [15:0] instruction;
-    wire mem_write;
-
-    wire[15:0] show;
 
     pipelinedProcessor pp_508251(
         clk,
@@ -22,46 +19,26 @@ module aa_pipe_tb;
         write_data_fm,
         write_addr_fm,
         ////////////
-        instruction,
-        mem_write,
-        show);
+        instruction
+        );
 
     initial begin
         ////////////////////// LOADING THE PROGRAM
         clk=1;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b01110_001_010_11111; // ldm R1, 
+        write_data_fm=16'b01100_001_010_11111; // Std r1, r2
 
         #100 rst_fm=0;
-        
-        #100 write_enable_fm=1;
+
+        #100 write_enable_fm=1;        
 
         
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=64; 
-        
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00000_01110111111; // NOP
+        write_data_fm=16'b01010_010_100_11111; // ldd r2, r4
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00000_01110111111; // NOP
-
-                
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00011_111_001_11101; // NOT r7
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01100_001_100_11111; // Std r1, r4
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00000_01110111111; // NOP
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00000_01110111111; // NOP
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01010_100_110_11111; // ldd r4, r6
+        write_data_fm=16'b11001_100_001_11111; // Add r4, r1
 
         #100
         reset = 1;

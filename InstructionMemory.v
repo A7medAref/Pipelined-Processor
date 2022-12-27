@@ -19,6 +19,7 @@ reg[15:0]regs[(1<<N)-1:0];
 
 input [15:0] jump_to;
 reg[31:0] pc=32'b0100000;
+reg[15:0] loadCaseCheck;
 
 
 integer i;
@@ -26,6 +27,7 @@ integer i;
 always@(negedge clk) begin
 	read_data_buf = read_data;
 end
+
 
 always@(posedge clk)
 begin
@@ -39,8 +41,17 @@ begin
 			end
 		else
 			pc=pc+1;
-	
+		
+		loadCaseCheck=read_data;
 		read_data=regs[pc];
+		if(loadCaseCheck[15:11] == 10 && 
+			(loadCaseCheck[7:5] == read_data[7:5] ||
+			loadCaseCheck[7:5] == read_data[10:8])) begin
+				$display("Load use case with load=%b and inst=%b", loadCaseCheck, read_data);
+				$display("Load destination=%b,  new inst src=%b  ,dst=%b", loadCaseCheck[7:5], read_data[10:8], read_data[7:5]);
+			  	read_data = 0;
+			  	pc = pc - 1;
+			end
 	end
 
 	if(write_enable)
