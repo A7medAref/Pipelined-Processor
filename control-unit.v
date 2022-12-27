@@ -23,12 +23,12 @@ module control_unit(
     output reg pop_signal,
     output reg in_port_signal,
     output reg out_port_signal,
-    output reg immediate_signal,
     output reg oneOperand,
     output reg[1:0] jump_type_signal,
     input jump_occured
 );
-
+    reg immediate_signal;
+    
     always @(negedge clk) begin
         // Buffering the data before changing
         mem_read_buf3 = mem_read_buf2;
@@ -59,11 +59,14 @@ module control_unit(
         pop_signal = 0;
         in_port_signal = 0;
         out_port_signal = 0;
-        immediate_signal = 0;
         jump_type_signal = 0;
 
         oneOperand = (isNot | isInc | isDec) ? 1 : 0;
 
+        // FLUSH if immediate signal = 1
+        // if (immediate_signal)
+        //     immediate_signal = 0;
+        // else 
         if (opcode == 1) // SETC
             alu_operation = 11;
         else if(opcode == 2) // CLRC
@@ -90,9 +93,9 @@ module control_unit(
             mem_write = 1;
             alu_operation = 13;
         end
-        else if(opcode == 13) begin // LOAD_IMMEDIATE
-            mem_read = 1;
+        else if(opcode == 14) begin // LOAD_IMMEDIATE
             immediate_signal = 1;
+            alu_operation = 14;
         end
         else if(opcode == 24) // MOV
             alu_operation = 4; 

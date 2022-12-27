@@ -25,7 +25,6 @@ module pipelinedProcessor(
     wire [15:0] read_data1_buf2;
     wire [15:0] read_data2_buf;
     wire [15:0] read_data2_buf2;
-    wire [15:0] immediateValue;
     wire [3:0] alu_operation_buf;
     wire destination_alu_select_buf;
     wire wb_buf, wb_buf2, wb_buf3;
@@ -35,7 +34,6 @@ module pipelinedProcessor(
     wire pop_signal;
     wire in_port_signal;
     wire out_port_signal;
-    wire immediate_signal;
     ////////////////////
     wire[1:0] jump_type_signal;
     wire jump_occured;
@@ -73,7 +71,6 @@ module pipelinedProcessor(
         read_data2_buf2,
         /////////////////////
 
-        immediateValue,
         alu_operation_buf,
         destination_alu_select_buf,
         wb_buf,
@@ -84,25 +81,29 @@ module pipelinedProcessor(
         pop_signal,
         in_port_signal,
         out_port_signal,
-        immediate_signal,
         jump_type_signal,
         jump_occured
         );
 
-    ALU_stage alu_1839(clk,
+    ALU_stage alu_1839( clk,
                         read_data1_buf,
                         read_data2_buf,
-                        immediateValue, 
                         alu_operation_buf,
                         destination_alu_select_buf,
                         result_buf,
                         result_buf2,
                         jump_type_signal,
-                        jump_occured
+                        jump_occured,
+                        instruction
                         );
 
-    dataMemory dm_1438(mem_read_buf2, mem_write_buf2, memory_data_output,
-                        read_data2_buf2, clk, 0/*rst*/, result_buf/*address come from alu*/,
+    dataMemory dm_1438(mem_read_buf2, 
+                        mem_write_buf2, 
+                        memory_data_output,
+                        read_data2_buf2,
+                        clk,
+                        1'b0/*rst*/, 
+                        result_buf/*address come from alu*/,
                         result_buf);
 
     wb_stage wb_85915(clk, mem_read_buf3, memory_data_output, result_buf2, wb_output);
