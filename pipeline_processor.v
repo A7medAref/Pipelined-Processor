@@ -93,12 +93,12 @@ module pipelinedProcessor(
 
     forwardingUnit fu(
         clk,
-        wb_buf,
-        wb_buf1,
+        wb_buf2,
+        wb_buf3,
         instruction[7:5],
         instruction[10:8],
-        reg1_buf1,
-        reg1_buf2,
+        reg2_buf1,
+        reg2_buf2,
         alu_input1_selection,
         alu_input2_selection
     );
@@ -135,3 +135,11 @@ module pipelinedProcessor(
 
     wb_stage wb_85915(clk, mem_read_buf3, memory_data_output, result_buf2, wb_output);
 endmodule
+/*
+Add r1 , r2
+Add r2 , r1
+
+F D E M W
+  F D E M W
+    F D E M W
+*/

@@ -35,12 +35,12 @@ module control_unit(
         mem_write_buf2 = mem_write_buf;
         wb_buf3 = wb_buf2;
         wb_buf2 = wb_buf;
+        wb_buf = wb;
         
         mem_read_buf = mem_read;
         mem_write_buf = mem_write;
 
         alu_operation_buf = alu_operation;
-        wb_buf = wb;
         destination_alu_select_buf = destination_alu_select;
     end
 
