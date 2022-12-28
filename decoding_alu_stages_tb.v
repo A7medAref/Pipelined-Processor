@@ -39,7 +39,10 @@ module aa_pipe_tb;
         write_data_fm=16'b01001_010_111_11111; // pop r2
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b11001_010_111_11111; // Add r2, r7
+        write_data_fm=16'b00001_010_111_11111; // setc
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01000_001_010_11111; // push r1
 
         //////////////////////////////////////
         // Load interrupt program

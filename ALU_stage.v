@@ -21,14 +21,18 @@ module ALU_stage (
     input[2:0] reg2_buf3,
     input[15:0] memory_data_output_load_case,
     input mem_read,
-    input mem_read_load_case
+    input mem_read_load_case,
+    output reg[2:0] flags_buffered,
+    output [2:0] saveStateCounter, 
+    output [2:0] stateType,
+    input[15:0] fetchWithMemoryDataBus
 );
 
     wire carry, zero, neg;
     wire [15:0] out;
     reg[15:0] result;
 
-    reg[2:0] flags, flags_buffered;
+    reg[2:0] flags;
 
     ALU alu_1(  register_content1, 
                 register_content2, 
@@ -66,7 +70,12 @@ module ALU_stage (
         //          wb1, wb2, mem_read, mem_write1, mem_write2, alu_control_signal);
 
         result = out;
-        flags = {carry , zero , neg};
+        if(stateType==2 && saveStateCounter ==3)begin
+            $display("Returning from interrupt with flags=%b", fetchWithMemoryDataBus);
+            flags = fetchWithMemoryDataBus[2:0];
+        end
+        else
+            flags = {carry , zero , neg};
         jump_occured = (jump_type_signal == 1 && flags_buffered[1]) ||
         (jump_type_signal == 2 && flags_buffered[0])||
         (jump_type_signal == 3 && flags_buffered[2]);

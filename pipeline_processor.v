@@ -16,7 +16,8 @@ module pipelinedProcessor(
 
     wire [15:0] memory_data_output;
     wire [15:0] result_buf;
-    wire [15:0] result_buf2;    
+    wire [15:0] result_buf2;
+    wire [15:0] fetchWithMemoryDataBus;
     
     wire mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3, mem_write_buf3;
     
@@ -27,7 +28,9 @@ module pipelinedProcessor(
     wire [3:0] alu_operation_buf;
     wire destination_alu_select_buf;
     wire wb_buf, wb_buf2, wb_buf3;
+    wire [2:0] saveStateCounter, stateType;
 
+    wire [2:0] flags_exec_unit;
     /////////////////// should be inputs for the next stage
     wire push_signal;
     wire pop_signal;
@@ -38,7 +41,7 @@ module pipelinedProcessor(
     wire jump_occured, direct_jump;
 
     wire[2:0] reg1_buf1, reg2_buf1 , reg2_buf2, reg2_buf3;
-    wire saveInterruptData;
+    wire [31:0] currentProgramCounter;
 
     fetchInstructionModule fim_45185(write_enable_fm,
                                     instruction, 
@@ -51,7 +54,10 @@ module pipelinedProcessor(
                                     direct_jump,
                                     read_data1_buf,
                                     interrupt,
-                                    saveInterruptData);
+                                    saveStateCounter,
+                                    stateType,
+                                    fetchWithMemoryDataBus,
+                                    currentProgramCounter);
 
     decodingStage ds_1331(
         clk,
@@ -114,7 +120,11 @@ module pipelinedProcessor(
                         reg2_buf3,
                         memory_data_output,
                         mem_read_buf,
-                        mem_read_buf3
+                        mem_read_buf3,
+                        flags_exec_unit,
+                        saveStateCounter,
+                    	stateType,
+                        fetchWithMemoryDataBus
                         );
 
     dataMemory dm_1438(mem_read_buf2, 
@@ -126,7 +136,12 @@ module pipelinedProcessor(
                         result_buf/*address come from alu*/,
                         result_buf,
                         push_signal,
-                        pop_signal);
+                        pop_signal,
+                        saveStateCounter,
+                        stateType,
+                        fetchWithMemoryDataBus,
+                        flags_exec_unit,
+                        currentProgramCounter);
 
     wb_stage wb_85915(clk, mem_read_buf3, memory_data_output, result_buf2, wb_output);
 endmodule
