@@ -34,11 +34,9 @@ module pipelinedProcessor(
     wire out_port_signal;
     ////////////////////
     wire[1:0] jump_type_signal;
-    wire jump_occured;
+    wire jump_occured, direct_jump;
 
     wire[2:0] reg1_buf1, reg2_buf1 , reg2_buf2, reg2_buf3;
-
-    wire[15:0] jump_to;
 
     fetchInstructionModule fim_45185(write_enable_fm,
                                     instruction, 
@@ -47,7 +45,9 @@ module pipelinedProcessor(
                                     rst_fm, 
                                     write_addr_fm, 
                                     jump_occured, 
-                                    read_data1_buf2);
+                                    read_data1_buf2,
+                                    direct_jump,
+                                    read_data1_buf);
 
     decodingStage ds_1331(
         clk,
@@ -80,6 +80,7 @@ module pipelinedProcessor(
         out_port_signal,
         jump_type_signal,
         jump_occured,
+        direct_jump,
         reg1_buf1,
         reg2_buf1,
         reg2_buf2,

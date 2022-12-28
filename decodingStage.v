@@ -29,6 +29,7 @@ module decodingStage(
     output out_port_signal,
     output[1:0] jump_type_signal,
     input jump_occured,
+    output direct_jump,
     output[2:0] reg1_buf1,
     output[2:0] reg2_buf1,
     output[2:0] reg2_buf2,
@@ -100,6 +101,7 @@ control_unit cu(
     out_port_signal,
     oneOperand,
     jump_type_signal,
-    jump_occured
+    jump_occured,
+    direct_jump
 );
 endmodule

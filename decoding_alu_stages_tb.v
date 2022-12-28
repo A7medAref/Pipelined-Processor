@@ -33,12 +33,18 @@ module aa_pipe_tb;
 
         #100 write_enable_fm=1;        
 
-        
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b01010_010_100_11111; // ldd r2, r4
 
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b11001_100_001_11111; // Add r4, r1
+
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b10011_111_100_11111; // jump r7
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01010_010_100_11111; // ldd r2, r4
 
         #100
         reset = 1;

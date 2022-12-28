@@ -6,9 +6,11 @@ module instructionMemory #(parameter N=6) ( write_enable,
 											rst,
 											write_addr,
 											jump_occured, 
-											jump_to);
+											jump_to,
+											direct_jump,
+											direct_jump_to);
 
-input write_enable,clk,rst, jump_occured;
+input write_enable,clk,rst, jump_occured, direct_jump;
 
 input[15:0]write_data;
 input[31:0] write_addr;
@@ -17,7 +19,7 @@ reg [15:0] read_data;
 output reg [15:0] read_data_buf;
 reg[15:0]regs[(1<<N)-1:0];
 
-input [15:0] jump_to;
+input [15:0] jump_to, direct_jump_to;
 reg[31:0] pc=32'b0100000;
 reg[15:0] loadCaseCheck;
 
@@ -38,6 +40,10 @@ begin
 			begin
 			  	$display("jumping to %d", jump_to);
 				pc={0,jump_to};
+			end
+		else if(direct_jump) begin
+			  	$display("direct jump to %d", direct_jump_to);
+				pc={0,direct_jump_to};
 			end
 		else
 			pc=pc+1;

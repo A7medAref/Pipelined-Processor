@@ -7,15 +7,17 @@ module fetchInstructionModule
 	rst,
 	write_addr,
 	jump_occured, 
-	jump_to
+	jump_to,
+	direct_jump,
+	direct_jump_to
 );
 
-input write_enable,clk,rst, jump_occured;
+input write_enable,clk,rst, jump_occured, direct_jump;
 input[15:0] write_data;
 input[31:0] write_addr;
 
 /////////////////////////////////////
-input [15:0] jump_to;
+input [15:0] jump_to, direct_jump_to;
 
 wire [15:0]instruction;
 output wire [15	:0]instruction_buf;
@@ -28,20 +30,8 @@ instructionMemory IF(write_enable,
 					rst,
 					write_addr,
 					jump_occured, 
-					jump_to);
-
-// always@(negedge clk)begin
-// 	if(rst)
-// 	pc=32'b0100000;
-// 	if(!write_enable && !rst) begin
-// 	  	if(jump_occured)
-// 			begin
-// 			  	$display("jumping to %d", jump_to);
-// 				pc={0,jump_to};
-// 			end
-// 		else
-// 			pc=pc+1;
-// 	end
-// end
+					jump_to,
+					direct_jump,
+					direct_jump_to);
 
 endmodule

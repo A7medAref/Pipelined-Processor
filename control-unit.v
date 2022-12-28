@@ -25,7 +25,8 @@ module control_unit(
     output reg out_port_signal,
     output reg oneOperand,
     output reg[1:0] jump_type_signal,
-    input jump_occured
+    input jump_occured,
+    output reg direct_jump
 );
     reg immediate_signal;
     
@@ -64,10 +65,15 @@ module control_unit(
         oneOperand = (isNot | isInc | isDec) ? 1 : 0;
 
         // FLUSH if immediate signal = 1
-        // if (immediate_signal)
-        //     immediate_signal = 0;
-        // else 
-        if (opcode == 1) // SETC
+        if (immediate_signal) begin
+            direct_jump = 0;
+            immediate_signal = 0;
+        end
+        else if(direct_jump)
+          direct_jump = 0;
+        else if(opcode == 19)
+            direct_jump = 1;
+        else if (opcode == 1) // SETC
             alu_operation = 11;
         else if(opcode == 2) // CLRC
             alu_operation = 12;
