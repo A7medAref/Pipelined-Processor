@@ -8,7 +8,7 @@ module aa_pipe_tb;
     reg[15:0] write_data_fm;
     reg write_enable_fm;
     wire [15:0] instruction;
-
+    reg interrupt;
     pipelinedProcessor pp_508251(
         clk,
         reset,
@@ -19,12 +19,14 @@ module aa_pipe_tb;
         write_data_fm,
         write_addr_fm,
         ////////////
-        instruction
+        instruction,
+        interrupt
         );
 
     initial begin
         ////////////////////// LOADING THE PROGRAM
         clk=1;
+        interrupt=0;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
         write_data_fm=16'b01000_001_010_11111; // push r1
@@ -39,13 +41,29 @@ module aa_pipe_tb;
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b11001_010_111_11111; // Add r2, r7
 
+        //////////////////////////////////////
+        // Load interrupt program
+        #100 write_addr_fm=0;
+        write_data_fm=16'b01100_001_010_11111; // Std r1, r2 => address 2 contains 1
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01010_010_100_11111; // ldd r2, r4 => register4 = 1
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b11001_100_001_11111; // Add r4, r1 => register1 = 1+1
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b10110_100_001_11111; // RTI
+
+
 
         #100
         reset = 1;
         #100
         reset = 0;
         #100 write_enable_fm=0;
-
+        #400 interrupt=1;
+        #100 interrupt=0;
     end
 
     always #50 begin

@@ -9,7 +9,8 @@ module pipelinedProcessor(
     input[15:0] write_data_fm,
     input[31:0] write_addr_fm,
     // can be removed
-    output [15:0] instruction
+    output [15:0] instruction,
+    input interrupt
     );
 
 
@@ -37,6 +38,7 @@ module pipelinedProcessor(
     wire jump_occured, direct_jump;
 
     wire[2:0] reg1_buf1, reg2_buf1 , reg2_buf2, reg2_buf3;
+    wire saveInterruptData;
 
     fetchInstructionModule fim_45185(write_enable_fm,
                                     instruction, 
@@ -47,7 +49,9 @@ module pipelinedProcessor(
                                     jump_occured, 
                                     read_data1_buf2,
                                     direct_jump,
-                                    read_data1_buf);
+                                    read_data1_buf,
+                                    interrupt,
+                                    saveInterruptData);
 
     decodingStage ds_1331(
         clk,
@@ -88,7 +92,7 @@ module pipelinedProcessor(
         reg2_buf3
         );
 
-    
+
 
     ALU_stage alu_1839( clk,
                         read_data1_buf,

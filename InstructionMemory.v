@@ -8,15 +8,18 @@ module instructionMemory #(parameter N=6) ( write_enable,
 											jump_occured, 
 											jump_to,
 											direct_jump,
-											direct_jump_to);
+											direct_jump_to,
+											interrupt,
+											saveInterruptData);
 
-input write_enable,clk,rst, jump_occured, direct_jump;
+input write_enable,clk,rst, jump_occured, direct_jump, interrupt;
 
 input[15:0]write_data;
 input[31:0] write_addr;
 output[15:0]read_data;
 reg [15:0] read_data;
 output reg [15:0] read_data_buf;
+output reg saveInterruptData;
 reg[15:0]regs[(1<<N)-1:0];
 
 input [15:0] jump_to, direct_jump_to;
@@ -30,12 +33,29 @@ always@(negedge clk) begin
 	read_data_buf = read_data;
 end
 
+reg interruptOccured=0;
+
+
 always@(posedge clk)
 begin
-	if(rst)
+	if(rst)	begin
+		interruptOccured=0;
+		saveInterruptData=0;
 		pc=32'b0011111;
-	if(!write_enable && !rst) begin
-	  	if(jump_occured)
+	end
+	
+	if(!write_enable && interrupt && !interruptOccured && !rst) begin
+		$display("interrupt at data %b", read_data);
+		read_data=0;
+		saveInterruptData=1;
+		interruptOccured=1;
+	end else if(!write_enable && !rst) begin
+		if(interruptOccured) begin
+		  	pc=0;
+			saveInterruptData=0;
+			interruptOccured=0;
+		end
+	  	else if(jump_occured)
 			begin
 			  	$display("jumping to %d", jump_to);
 				pc={0,jump_to};
