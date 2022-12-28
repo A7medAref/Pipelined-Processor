@@ -17,7 +17,7 @@ module pipelinedProcessor(
     wire [15:0] result_buf;
     wire [15:0] result_buf2;    
     
-    wire mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3;
+    wire mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3, mem_write_buf3;
     
     wire [15:0] read_data1_buf;
     wire [15:0] read_data1_buf2;
@@ -62,6 +62,7 @@ module pipelinedProcessor(
         mem_read_buf2,
         mem_write_buf2,
         mem_read_buf3,
+        mem_write_buf3,
         read_data1_buf,
         read_data1_buf2,
         read_data2_buf,
@@ -101,11 +102,14 @@ module pipelinedProcessor(
                         instruction,
                         wb_buf2,
                         wb_buf3,
+                        mem_write_buf2,
+                        mem_write_buf3,
                         reg1_buf1,
                         reg2_buf1,
                         reg2_buf2,
                         reg2_buf3,
                         memory_data_output,
+                        mem_read_buf,
                         mem_read_buf3
                         );
 
@@ -116,7 +120,9 @@ module pipelinedProcessor(
                         clk,
                         1'b0/*rst*/, 
                         result_buf/*address come from alu*/,
-                        result_buf);
+                        result_buf,
+                        push_signal,
+                        pop_signal);
 
     wb_stage wb_85915(clk, mem_read_buf3, memory_data_output, result_buf2, wb_output);
 endmodule

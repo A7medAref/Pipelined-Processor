@@ -12,6 +12,7 @@ module control_unit(
     output reg mem_read_buf2,
     output reg mem_write_buf2,
     output reg mem_read_buf3,
+    output reg mem_write_buf3,
     
     output reg[3:0] alu_operation_buf,
     output reg wb_buf,
@@ -19,8 +20,8 @@ module control_unit(
     output reg wb_buf3,
     output reg destination_alu_select_buf,
 
-    output reg push_signal,
-    output reg pop_signal,
+    output reg push_signal_buf2,
+    output reg pop_signal_buf2,
     output reg in_port_signal,
     output reg out_port_signal,
     output reg oneOperand,
@@ -29,14 +30,22 @@ module control_unit(
     output reg direct_jump
 );
     reg immediate_signal;
-    
+    reg push_signal, pop_signal, push_signal_buf, pop_signal_buf;
+
     always @(negedge clk) begin
         // Buffering the data before changing
         mem_read_buf3 = mem_read_buf2;
         mem_read_buf2 = mem_read_buf;
+        mem_write_buf3 = mem_write_buf2;
         mem_write_buf2 = mem_write_buf;
         wb_buf3 = wb_buf2;
         wb_buf2 = wb_buf;
+
+        push_signal_buf2 = push_signal_buf;
+        push_signal_buf = push_signal;
+        
+        pop_signal_buf2 = pop_signal_buf;
+        pop_signal_buf = pop_signal;
         
         mem_read_buf = mem_read;
         mem_write_buf = mem_write & !jump_occured;
@@ -87,10 +96,15 @@ module control_unit(
             in_port_signal = 1;
         else if(opcode == 7) // OUT
             out_port_signal = 1;
-        else if(opcode == 8) // PUSH
+        else if(opcode == 8) begin // PUSH
             push_signal = 1;
-        else if(opcode == 9) // POP
+            alu_operation = 13;
+        end 
+        else if(opcode == 9) begin // POP
             pop_signal = 1;
+            alu_operation = 13;
+            mem_read = 1;
+        end
         else if(opcode == 10) begin // LOAD
             mem_read = 1;
             alu_operation = 13;
@@ -136,7 +150,7 @@ module control_unit(
 
 
         // may be change if we added mem_read to signal that doesn't write back
-        wb = (alu_operation != 0 || mem_read) & !mem_write 
+        wb = (alu_operation != 0 || mem_read) & !mem_write & !push_signal 
         & alu_operation !=11 & alu_operation != 12 & !jump_occured;
 
 

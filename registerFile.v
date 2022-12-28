@@ -21,7 +21,9 @@ module reg_file (
     reg[15:0] data[7:0];
     reg [2:0] write_addr_buf1, write_addr_buf2, write_addr_buf3;
     wire singleOperand;
-    assign singleOperand = (opcode == 3 | opcode == 4 | opcode == 5 | opcode == 14 | opcode == 30 | opcode == 31);
+    assign singleOperand = (opcode == 3 | opcode == 4 | opcode == 5 | 
+                            opcode == 8 | opcode == 9 | opcode == 14 |
+                            opcode == 30 | opcode == 31);
     
     
     ////////////////////////////
@@ -56,7 +58,7 @@ module reg_file (
 
         reg2_buf3 = reg2_buf2;
         reg2_buf2 = reg2_buf1;
-        reg2_buf1 = oneOperand ? read_addr1 : read_addr2;
+        reg2_buf1 = singleOperand ? read_addr1 : read_addr2;
         
         reg1_buf1 = read_addr1;
 
@@ -65,7 +67,7 @@ module reg_file (
             read_data1 = data[read_addr2];
             read_data2 = data[read_addr1];
         end         
-        else if(oneOperand == 1)
+        else if(singleOperand)
             read_data2 = read_data1;
         else
             read_data2 = data[read_addr2];

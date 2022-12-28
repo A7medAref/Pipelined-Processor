@@ -30,7 +30,6 @@ always@(negedge clk) begin
 	read_data_buf = read_data;
 end
 
-
 always@(posedge clk)
 begin
 	if(rst)
@@ -50,12 +49,12 @@ begin
 		
 		loadCaseCheck=read_data;
 		read_data=regs[pc];
-		if(loadCaseCheck[15:11] == 10 && 
-			(loadCaseCheck[7:5] == read_data[7:5] ||
-			loadCaseCheck[7:5] == read_data[10:8])) begin
-				$display("Load use case with load=%b and inst=%b", loadCaseCheck, read_data);
-				$display("Load destination=%b,  new inst src=%b  ,dst=%b", loadCaseCheck[7:5], read_data[10:8], read_data[7:5]);
-			  	read_data = 0;
+		if(((loadCaseCheck[15:11] === 10) && (loadCaseCheck[7:5] === read_data[7:5] || loadCaseCheck[7:5] === read_data[10:8])) ||
+			(loadCaseCheck[15:11] === 9 && (loadCaseCheck[10:8] === read_data[7:5] || loadCaseCheck[10:8] === read_data[10:8]))) begin
+				$display("memory read hazard with inst %d where destination=%b,  new inst src=%b  ,dst=%b",
+				 			loadCaseCheck[15:11], loadCaseCheck[7:5], read_data[10:8], read_data[7:5]);
+
+				read_data = 0;
 			  	pc = pc - 1;
 			end
 	end

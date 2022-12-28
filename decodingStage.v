@@ -9,7 +9,8 @@ module decodingStage(
     // buffering for memory stage
     output mem_read_buf2,
     output mem_write_buf2,
-    output mem_read_buf3,
+    output mem_read_buf3, 
+    output mem_write_buf3,
 
     output [15:0] read_data1,
     output [15:0] read_data1_buf,
@@ -89,6 +90,7 @@ control_unit cu(
     mem_read_buf2,
     mem_write_buf2,
     mem_read_buf3,
+    mem_write_buf3,
     alu_operation_buf,
     wb_buf,
     wb_buf2,
