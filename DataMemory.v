@@ -1,8 +1,9 @@
-module dataMemory #(parameter N=10) (read_enable, write_enable, memory_data_output,
+module dataMemory #(parameter N=15) (read_enable, write_enable, memory_data_output,
 									write_data, clk, rst, read_addr,
 									write_addr, push_signal, pop_signal,
 									functions_destination_address,
-									fetch_bus_memory, currentFlags);
+									fetch_bus_memory, currentFlags,
+									data_sent_back);
 
 input read_enable,write_enable,clk,rst, push_signal, pop_signal;
 input[15:0] write_data;
@@ -14,8 +15,9 @@ integer i;
 input [15:0] fetch_bus_memory;
 input [2:0] currentFlags;
 input [1:0] functions_destination_address;
+output reg[15:0] data_sent_back;
 
-reg sp=32768;
+reg[15:0] sp=32768;
 always@(posedge clk)begin
 	if(rst)begin
 		for(i=0;i<8;i=i+1)begin
@@ -31,6 +33,7 @@ always@(posedge clk)begin
 		if(pop_signal) begin
 			$display("pop value", regs[sp]);
 			read_data=regs[sp];
+			data_sent_back=read_data;
 			sp=sp+1;
 		end else if(read_enable)begin
 			read_data=regs[read_addr];
@@ -38,7 +41,7 @@ always@(posedge clk)begin
 		end
 
 		if(push_signal) begin
-			$display("dest=%d fetch_bus_memory=%d flags=%b",functions_destination_address,fetch_bus_memory, currentFlags);
+			// $display("dest=%d fetch_bus_memory=%d flags=%b",functions_destination_address,fetch_bus_memory, currentFlags);
 			sp=sp-1;
 			regs[sp]= functions_destination_address==1 ? fetch_bus_memory :
 					  functions_destination_address==2 ? {0,currentFlags} :	

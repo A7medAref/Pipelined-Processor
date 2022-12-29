@@ -41,7 +41,7 @@ module pipelinedProcessor(
     wire [1:0] functions_destination_address;
     wire [15:0] fetch_bus_memory;
     wire [2:0] currentFlags;
-
+    wire[15:0] data_sent_back_from_data_memory;
     fetchInstructionModule fim_45185(write_enable_fm,
                                     instruction, 
                                     write_data_fm, 
@@ -54,7 +54,8 @@ module pipelinedProcessor(
                                     read_data1_buf,
                                     interrupt,
                                     functions_destination_address,
-                                    fetch_bus_memory);
+                                    fetch_bus_memory,
+                                    data_sent_back_from_data_memory);
 
     decodingStage ds_1331(
         clk,
@@ -118,8 +119,9 @@ module pipelinedProcessor(
                         memory_data_output,
                         mem_read_buf,
                         mem_read_buf3,
-                        currentFlags
-                        );
+                        currentFlags,
+                        functions_destination_address,
+                        data_sent_back_from_data_memory);
 
     dataMemory dm_1438(mem_read_buf2, 
                         mem_write_buf2, 
@@ -133,7 +135,8 @@ module pipelinedProcessor(
                         pop_signal,
                         functions_destination_address,
                         fetch_bus_memory,
-                        currentFlags);
+                        currentFlags,
+                        data_sent_back_from_data_memory);
 
     wb_stage wb_85915(clk, mem_read_buf3, memory_data_output, result_buf2, wb_output);
 endmodule

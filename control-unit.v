@@ -108,6 +108,9 @@ module control_unit(
         else if(opcode == 10) begin // LOAD
             mem_read = 1;
             alu_operation = 13;
+        end else if(opcode == 11) begin // POP
+            pop_signal = 1;
+            alu_operation = 13;
         end
         else if(opcode == 12) begin // STORE
             mem_write = 1;
@@ -151,7 +154,7 @@ module control_unit(
 
         // may be change if we added mem_read to signal that doesn't write back
         wb = (alu_operation != 0 || mem_read) & !mem_write & !push_signal 
-        & alu_operation !=11 & alu_operation != 12 & !jump_occured;
+        & alu_operation !=11 & alu_operation != 12 & !jump_occured & opcode != 11;
 
 
     end

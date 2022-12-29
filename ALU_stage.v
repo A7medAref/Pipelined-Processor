@@ -22,7 +22,9 @@ module ALU_stage (
     input[15:0] memory_data_output_load_case,
     input mem_read,
     input mem_read_load_case,
-    output reg[2:0] flags_buffered 
+    output reg[2:0] flags_buffered,
+    input[1:0] functions_destination_address,
+    input[15:0] data_sent_back_from_data_memory
 );
 
     wire carry, zero, neg;
@@ -67,7 +69,13 @@ module ALU_stage (
         //          wb1, wb2, mem_read, mem_write1, mem_write2, alu_control_signal);
 
         result = out;
-        flags = {carry , zero , neg};
+        if(functions_destination_address==3) begin
+            flags=data_sent_back_from_data_memory[2:0];
+            $display("flags %b returned", flags);
+        end
+        else
+            flags = {carry , zero , neg};
+
         jump_occured = (jump_type_signal == 1 && flags_buffered[1]) ||
         (jump_type_signal == 2 && flags_buffered[0])||
         (jump_type_signal == 3 && flags_buffered[2]);
