@@ -21,14 +21,15 @@ module ALU_stage (
     input[2:0] reg2_buf3,
     input[15:0] memory_data_output_load_case,
     input mem_read,
-    input mem_read_load_case
+    input mem_read_load_case,
+    output reg[2:0] flags_buffered 
 );
 
     wire carry, zero, neg;
     wire [15:0] out;
     reg[15:0] result;
 
-    reg[2:0] flags, flags_buffered;
+    reg[2:0] flags;
 
     ALU alu_1(  register_content1, 
                 register_content2, 

@@ -38,7 +38,9 @@ module pipelinedProcessor(
     wire jump_occured, direct_jump;
 
     wire[2:0] reg1_buf1, reg2_buf1 , reg2_buf2, reg2_buf3;
-    wire saveInterruptData;
+    wire [1:0] functions_destination_address;
+    wire [15:0] fetch_bus_memory;
+    wire [2:0] currentFlags;
 
     fetchInstructionModule fim_45185(write_enable_fm,
                                     instruction, 
@@ -51,7 +53,8 @@ module pipelinedProcessor(
                                     direct_jump,
                                     read_data1_buf,
                                     interrupt,
-                                    saveInterruptData);
+                                    functions_destination_address,
+                                    fetch_bus_memory);
 
     decodingStage ds_1331(
         clk,
@@ -114,7 +117,8 @@ module pipelinedProcessor(
                         reg2_buf3,
                         memory_data_output,
                         mem_read_buf,
-                        mem_read_buf3
+                        mem_read_buf3,
+                        currentFlags
                         );
 
     dataMemory dm_1438(mem_read_buf2, 
@@ -126,7 +130,10 @@ module pipelinedProcessor(
                         result_buf/*address come from alu*/,
                         result_buf,
                         push_signal,
-                        pop_signal);
+                        pop_signal,
+                        functions_destination_address,
+                        fetch_bus_memory,
+                        currentFlags);
 
     wb_stage wb_85915(clk, mem_read_buf3, memory_data_output, result_buf2, wb_output);
 endmodule
