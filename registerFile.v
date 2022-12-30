@@ -32,7 +32,7 @@ module reg_file (
     always @(reset) begin
         if (reset) begin
             for (i = 0; i<8; i=i+1) begin
-                data[i] = i;
+                data[i] = 0;
             end
         end
     end
@@ -58,9 +58,9 @@ module reg_file (
 
         reg2_buf3 = reg2_buf2;
         reg2_buf2 = reg2_buf1;
-        reg2_buf1 = singleOperand ? read_addr1 : read_addr2;
+        reg2_buf1 = (singleOperand || opcode == 12) ? read_addr1 : read_addr2;
         
-        reg1_buf1 = read_addr1;
+        reg1_buf1 = (opcode == 12) ? read_addr2 : read_addr1;
 
 
         if(mem_write) begin

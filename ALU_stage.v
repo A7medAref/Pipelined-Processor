@@ -24,14 +24,18 @@ module ALU_stage (
     input mem_read_load_case,
     output reg[2:0] flags_buffered,
     input[1:0] functions_destination_address,
-    input[15:0] data_sent_back_from_data_memory
+    input[15:0] data_sent_back_from_data_memory,
+    output reg[15:0] dst_from_forwarding_unit,
+    output [15:0] forward_unit_src
 );
 
     wire carry, zero, neg;
     wire [15:0] out;
     reg[15:0] result;
 
+
     reg[2:0] flags;
+    wire[15:0] in_dst;
 
     ALU alu_1(  register_content1, 
                 register_content2, 
@@ -53,7 +57,9 @@ module ALU_stage (
                 reg2_buf3,
                 memory_data_output_load_case,
                 mem_read,
-                mem_read_load_case
+                mem_read_load_case,
+                in_dst,
+                forward_unit_src
                 );
 
 
@@ -62,6 +68,7 @@ module ALU_stage (
         result_buf2 = result_buf;
         result_buf = result;
         flags_buffered = flags;
+        dst_from_forwarding_unit = in_dst;
     end
 
     always @(posedge clk) begin

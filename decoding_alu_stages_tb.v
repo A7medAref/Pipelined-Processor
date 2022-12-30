@@ -1,7 +1,8 @@
+// ALU TESTS
 module aa_pipe_tb;
-	reg clk, reset;
-	reg [2:0] write_addr;
-	reg write_en;
+    reg clk, reset;
+    reg [2:0] write_addr;
+    reg write_en;
     wire [15:0] result;
     reg rst_fm;
     reg[31:0] write_addr_fm;
@@ -29,57 +30,80 @@ module aa_pipe_tb;
         interrupt=0;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b01000_001_010_11111; // push r1
+        write_data_fm=16'b01110_001_00000000;
 
         #100 rst_fm=0;
 
-        #100 write_enable_fm=1;        
+        #100 write_enable_fm=1;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01001_010_111_11111; // pop r2
+        write_data_fm=60;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00001_000_000_11111; // setc
+        write_data_fm=16'b00001_000_00000000;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b11001_111_001_11111; // Add r4, r1 => register1 = 1+1
+        write_data_fm=16'b10010_001_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01110_001_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b000000000_1010000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00100_010_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01100_001_010_00000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01010_010_101_00000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00100_101_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01000_101_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01001_111_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b00100_111_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b01110_000_00000000;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b0000000000000_110;
+
+        #100 write_addr_fm=write_addr_fm+1;
+        write_data_fm=16'b11001_000_000_00000;
+
 
         //////////////////////////////////////
         // Load interrupt program
-        #100 write_addr_fm=0;
-        write_data_fm=16'b01100_001_010_11111; // Std r1, r2 => address 2 contains 1
+        #100 write_addr_fm=60;
+        write_data_fm=16'b01110_111_00000000;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01010_010_100_11111; // ldd r2, r4 => register4 = 1
+        write_data_fm=16'b0000000000_100100;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b11001_100_001_11111; // Add r4, r1 => register1 = 1+1
+        write_data_fm=16'b0;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b10110_100_001_11111; // RTI
-
-
+        write_data_fm=16'b10011_111_00000000;
 
         #100
         reset = 1;
         #100
         reset = 0;
         #100 write_enable_fm=0;
-        #300 interrupt=1;
-        #100 interrupt=0;
     end
 
     always #50 begin
         clk = ~clk;
     end
 endmodule
-
-// STD R1, R2
-// ADD R1, R2
-// NOT R3
-// NOP
-// LDD R2, R7
-
-// result changed
-// R2 = 3, R3 = 1111_1111_1111_1100 , R7 = 2
-// MEMORY (WITH LOCATION 010) = 1 

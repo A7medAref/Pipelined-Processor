@@ -17,7 +17,7 @@ module pipelinedProcessor(
     wire [15:0] memory_data_output;
     wire [15:0] result_buf;
     wire [15:0] result_buf2;    
-    
+    wire [15:0] forward_unit_src;    
     wire mem_read_buf, mem_write_buf, mem_read_buf2, mem_write_buf2, mem_read_buf3, mem_write_buf3;
     
     wire [15:0] read_data1_buf;
@@ -42,6 +42,8 @@ module pipelinedProcessor(
     wire [15:0] fetch_bus_memory;
     wire [2:0] currentFlags;
     wire[15:0] data_sent_back_from_data_memory;
+    wire [15:0] dst_from_forwarding_unit;
+
     fetchInstructionModule fim_45185(write_enable_fm,
                                     instruction, 
                                     write_data_fm, 
@@ -51,11 +53,12 @@ module pipelinedProcessor(
                                     jump_occured, 
                                     read_data1_buf2,
                                     direct_jump,
-                                    read_data1_buf,
+                                    forward_unit_src,
                                     interrupt,
                                     functions_destination_address,
                                     fetch_bus_memory,
-                                    data_sent_back_from_data_memory);
+                                    data_sent_back_from_data_memory,
+                                    read_data2_buf);
 
     decodingStage ds_1331(
         clk,
@@ -121,12 +124,14 @@ module pipelinedProcessor(
                         mem_read_buf3,
                         currentFlags,
                         functions_destination_address,
-                        data_sent_back_from_data_memory);
+                        data_sent_back_from_data_memory,
+                        dst_from_forwarding_unit,
+                        forward_unit_src);
 
     dataMemory dm_1438(mem_read_buf2, 
                         mem_write_buf2, 
                         memory_data_output,
-                        read_data2_buf2,
+                        dst_from_forwarding_unit,
                         clk,
                         1'b0/*rst*/, 
                         result_buf/*address come from alu*/,

@@ -1,4 +1,4 @@
-module instructionMemory #(parameter N=6) ( write_enable,
+module instructionMemory #(parameter N=20) ( write_enable,
 											read_data,
 											read_data_buf,
 											write_data,
@@ -12,10 +12,11 @@ module instructionMemory #(parameter N=6) ( write_enable,
 											interrupt,
 											functions_destination_address_buf3,
 											fetch_bus_memory_buf3,
-											data_sent_back_from_data_memory);
+											data_sent_back_from_data_memory,
+											call_destination_reg);
 
 input write_enable,clk,rst, jump_occured, direct_jump, interrupt;
-
+input [15:0] call_destination_reg;
 input[15:0]write_data;
 input[31:0] write_addr;
 output[15:0]read_data;
@@ -53,6 +54,7 @@ end
 
 reg [2:0] stallType=0;
 reg [3:0] num_of_instructions_should_insert;
+reg [2:0] address_of_dest_call;
 always@(posedge clk)
 begin
 	if(rst)	begin
@@ -72,9 +74,12 @@ begin
 		end
 
 		if(stallType == 3) begin
-			// $display("pushing required data");
-			if(num_of_instructions_should_insert == 1) begin
+			if(num_of_instructions_should_insert == 3) begin
 				fetch_bus_memory=pc[15:0];
+			end else begin
+				functions_destination_address=0;
+				read_data[15:11]=0;
+				read_data[7:5]=address_of_dest_call; 
 			end
 		end
 
@@ -109,12 +114,13 @@ begin
 		num_of_instructions_should_insert=2;
 		read_data[15:11]=8;
 	end else if(!write_enable && !rst) begin
-		
 		if(stallType == 2 || stallType == 4) begin
 			pc[31:16]=data_sent_back_from_data_memory;  
 		end
-		
-		if(stallType==1) begin
+
+		if(stallType==3) begin
+			pc = {0, call_destination_reg};
+		end else if(stallType==1) begin
 		  	pc=0;
 		end else if(jump_occured)
 			begin
@@ -138,11 +144,12 @@ begin
 			num_of_instructions_should_insert=5;
 			read_data[15:11]=11;
 		end else if(read_data[15:11] == 20) begin
-			$display("CALL");
+			$display("CALL ", regs[40]);
 			stallType=3;
 			functions_destination_address=1;
 			fetch_bus_memory=pc[31:16];
-			num_of_instructions_should_insert=1;
+			num_of_instructions_should_insert=3;
+			address_of_dest_call=read_data[10:8];
 			read_data[15:11]=8;
 		end else if(read_data[15:11] == 21) begin
 			$display("RET");
@@ -150,8 +157,7 @@ begin
 			num_of_instructions_should_insert=4;
 			read_data[15:11]=11;
 		end
-
-		if(((loadCaseCheck[15:11] === 10) && (loadCaseCheck[7:5] === read_data[7:5] || loadCaseCheck[7:5] === read_data[10:8])) ||
+		else if(((loadCaseCheck[15:11] === 10) && (loadCaseCheck[7:5] === read_data[7:5] || loadCaseCheck[7:5] === read_data[10:8])) ||
 			(loadCaseCheck[15:11] === 9 && (loadCaseCheck[10:8] === read_data[7:5] || loadCaseCheck[10:8] === read_data[10:8]))) begin
 				$display("memory read hazard with inst %d where destination=%b,  new inst src=%b  ,dst=%b",
 				 			loadCaseCheck[15:11], loadCaseCheck[7:5], read_data[10:8], read_data[7:5]);

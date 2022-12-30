@@ -155,7 +155,5 @@ module control_unit(
         // may be change if we added mem_read to signal that doesn't write back
         wb = (alu_operation != 0 || mem_read) & !mem_write & !push_signal 
         & alu_operation !=11 & alu_operation != 12 & !jump_occured & opcode != 11;
-
-
     end
 endmodule

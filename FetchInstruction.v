@@ -13,7 +13,8 @@ module fetchInstructionModule
 	interrupt,
 	functions_destination_address,
 	fetch_bus_memory,
-	data_sent_back_from_data_memory
+	data_sent_back_from_data_memory,
+	call_destination_reg
 );
 
 input write_enable,clk,rst, jump_occured, direct_jump, interrupt;
@@ -26,7 +27,7 @@ input[15:0] data_sent_back_from_data_memory;
 
 /////////////////////////////////////
 wire [15:0]	instruction;
-
+input [15:0] call_destination_reg;
 output [15:0] fetch_bus_memory;
 
 instructionMemory IF(write_enable,
@@ -43,6 +44,7 @@ instructionMemory IF(write_enable,
 					interrupt,
 					functions_destination_address,
 					fetch_bus_memory,
-					data_sent_back_from_data_memory);
+					data_sent_back_from_data_memory,
+					call_destination_reg);
 
 endmodule

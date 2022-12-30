@@ -18,18 +18,17 @@ module ALU#(parameter N=16) (input[N-1:0] new_src,
                             input[2:0] reg2_buf3,
                             input[15:0] memory_data_output_load_case,
                             input mem_read,
-                            input mem_read_load_case);
+                            input mem_read_load_case,
+                            output[N-1:0] in_dst,
+                            output[N-1:0] in_src);
 
-    wire[N-1:0] in_src, in_dst;
-    wire temp;
-    
-    assign in_src = (reg1_buf1 === reg2_buf2 && wb1) ? result_prev1 : 
-                  (reg1_buf1 === reg2_buf3 && wb2) ?
+    assign in_src = ((reg1_buf1 === reg2_buf2) && wb1) ? result_prev1 : 
+                  ((reg1_buf1 === reg2_buf3) && wb2) ?
                   mem_read_load_case ? memory_data_output_load_case : result_prev2
                   : new_src;
 
-    assign in_dst = (reg2_buf1 === reg2_buf2 && wb1) ? result_prev1 : 
-                  (reg2_buf1 === reg2_buf3 && wb2) ? 
+    assign in_dst = ((reg2_buf1 === reg2_buf2) && wb1) ? result_prev1 : 
+                  ((reg2_buf1 === reg2_buf3) && wb2) ? 
                   mem_read_load_case ? memory_data_output_load_case : result_prev2
                   : new_dst;
 
