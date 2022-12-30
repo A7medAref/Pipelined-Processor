@@ -37,19 +37,7 @@ module aa_pipe_tb;
         #100 write_enable_fm=1;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=60;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00001_000_00000000;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b10010_001_00000000;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01110_001_00000000;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b000000000_1010000;
+        write_data_fm=16'b0000000000_100011;
 
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b00100_010_00000000;
@@ -71,30 +59,6 @@ module aa_pipe_tb;
 
         #100 write_addr_fm=write_addr_fm+1;
         write_data_fm=16'b00100_111_00000000;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01110_000_00000000;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b0000000000000_110;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b11001_000_000_00000;
-
-
-        //////////////////////////////////////
-        // Load interrupt program
-        #100 write_addr_fm=60;
-        write_data_fm=16'b01110_111_00000000;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b0000000000_100100;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b0;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b10011_111_00000000;
 
         #100
         reset = 1;
