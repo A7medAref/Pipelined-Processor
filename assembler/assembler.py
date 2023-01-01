@@ -46,6 +46,12 @@ def DecimalToBinary(num):
         return st + "0" 
     return st + "1"
 
+def hexaToBinary(num):
+    scale = 16
+    num_of_bits = 16
+    hexa = bin(int(num, scale))[2:].zfill(num_of_bits)
+    return hexa
+
 def push_zeros_to_16_bit(str):
     return ((16 - len(str))*"0") + str
 
@@ -59,25 +65,36 @@ def check_immediate(instruction):
     if instruction[0] == 'ldm': 
         return True
     #print(instruction[2].isnumeric())
-    return (instruction[0] == 'shr' or instruction[0] == 'shl') and instruction[2].strip().isnumeric()
+    return (instruction[0] == 'shr' or instruction[0] == 'shl') and int(instruction[2].strip(), 16)
+
+def org_behaviour(file, curr_line, org_address):
+    for i in range(curr_line, org_address):
+        file.write('0000000000000000\n')
+
 
 file_name= './assembly.txt'
 assembly_file = open(file_name, 'r')
 machine_code = open('machine_code.txt', 'w')
+current_line = 0
 for line in assembly_file:
     line = line.lower().replace(',', ' ')
     line = re.sub(' +', ' ', line)
     op_code = ""
     curr_instruction = line.split(' ')
     try:
-        if check_immediate(curr_instruction):
+        if curr_instruction[0] == 'org':
+            org_behaviour(machine_code, current_line, int(curr_instruction[1], 16))
+            current_line = int(curr_instruction[1], 16)
+
+        elif check_immediate(curr_instruction):
             #print('I am ldm', curr_instruction[2])
             #print('success', curr_instruction)
             op_code += op_codes[curr_instruction[0]]
             op_code += op_codes[curr_instruction[1]]
             op_code = append_zeros_to_16_bit(op_code)
             machine_code.write(op_code+'\n')
-            machine_code.write(push_zeros_to_16_bit(DecimalToBinary(int(curr_instruction[2])))+'\n')
+            machine_code.write(hexaToBinary(curr_instruction[2])+'\n')
+            current_line += 2
             #print(op_code)
             #print(push_zeros_to_16_bit(DecimalToBinary(int(curr_instruction[2])))+'\n')
 
@@ -87,6 +104,7 @@ for line in assembly_file:
                 op_code += op_codes[code]
             op_code = append_zeros_to_16_bit(op_code)
             machine_code.write(op_code+'\n')
+            current_line += 1
             #print('success', curr_instruction)
             #print(op_code)
     except:

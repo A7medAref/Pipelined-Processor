@@ -3,5 +3,7 @@ add        r3,           r4
 push            r7
 ldm r5, 12
 jmp r6
+ORG 20
 shr r3, 23
-shl r7, 1
+ORG 28
+shl r7, FA
