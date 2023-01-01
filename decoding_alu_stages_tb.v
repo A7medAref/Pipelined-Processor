@@ -33,46 +33,16 @@ module aa_pipe_tb;
         clk=1;
         interrupt=0;
         rst_fm=1;
-        write_addr_fm=32'b0000_0000_0000_0010_0000;
-        write_data_fm=16'b01110_001_00000000;
-        in_port=7;
-
+        in_port=10;
         #100 rst_fm=0;
-
         #100 write_enable_fm=1;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b0000000000_100011;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00111_001_00000000;
-
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00110_001_00000000;
-
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b01100_001_010_00000;
-
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b01010_010_101_00000;
-
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b00100_101_00000000;
-
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b01000_101_00000000;
-
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b01001_111_00000000;
-
-        // #100 write_addr_fm=write_addr_fm+1;
-        // write_data_fm=16'b00100_111_00000000;
-
-        #100
+        #200
         reset = 1;
         #100
         reset = 0;
         #100 write_enable_fm=0;
+        #450 interrupt=1;
+        #100 interrupt=0;
     end
 
     always #50 begin

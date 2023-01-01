@@ -92,13 +92,13 @@ module control_unit(
             alu_operation = 2;
         else if(isDec) // DEC
             alu_operation = 3;
-        else if(opcode == 6) begin // IN
+        else if(opcode == 6) begin // out
             out_port_signal = 1;
+        end else if(opcode == 7) begin // In
+            in_port_signal = 1;
             // To set the wb
             alu_operation=15;
-        end else if(opcode == 7) // OUT
-            in_port_signal = 1;
-        else if(opcode == 8) begin // PUSH
+        end else if(opcode == 8) begin // PUSH
             push_signal = 1;
             alu_operation = 13;
         end 

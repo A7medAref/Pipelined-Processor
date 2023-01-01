@@ -159,16 +159,15 @@ begin
 		end
 		else if(((loadCaseCheck[15:11] === 10) && (loadCaseCheck[7:5] === read_data[7:5] || loadCaseCheck[7:5] === read_data[10:8])) ||
 			(loadCaseCheck[15:11] === 9 && (loadCaseCheck[10:8] === read_data[7:5] || loadCaseCheck[10:8] === read_data[10:8]))) begin
-				$display("memory read hazard with inst %d where destination=%b,  new inst src=%b  ,dst=%b",
-				 			loadCaseCheck[15:11], loadCaseCheck[7:5], read_data[10:8], read_data[7:5]);
-
 				read_data = 0;
 			  	pc = pc - 1;
 			end
 	end
 
-	if(write_enable)
-		regs[write_addr]=write_data;
+	if(write_enable) begin
+		$readmemb("./assembler/machine_code.txt", regs);
+		// regs[write_addr]=write_data;
+	end
 end
 
 endmodule

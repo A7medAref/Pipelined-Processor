@@ -79,7 +79,7 @@ module ALU_stage (
     always @(posedge clk) begin
         // $display("wb1=%b wb2=%b mem_read=%b mem_write1=%b mem_write2=%b alu_operation=%d",
         //          wb1, wb2, mem_read, mem_write1, mem_write2, alu_control_signal);
-
+        // $display("control_signal", alu_control_signal)
         result = out;
         if(functions_destination_address==3) begin
             flags=data_sent_back_from_data_memory[2:0];

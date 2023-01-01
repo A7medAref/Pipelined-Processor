@@ -44,7 +44,7 @@ module ALU#(parameter N=16) (input[N-1:0] new_src,
                               (controlSignal == 7) ? (in_src & in_dst) :
                               (controlSignal == 8) ? (in_src | in_dst) :
                               (controlSignal == 9) ? {in_src[N-1], (in_src << instruction)} :// shift left
-                              (controlSignal == 10) ? {0, (in_src >> instruction)} :// shift right
+                              (controlSignal == 10) ? {in_src[0], (in_src >> instruction)} :// shift right
                               (controlSignal == 11) ? {1 , out} :
                               (controlSignal == 12) ? {0 , out} :
                               (controlSignal == 13) ? {carryFlag , in_src} : // STD or load
@@ -53,7 +53,7 @@ module ALU#(parameter N=16) (input[N-1:0] new_src,
                               {carryFlag, out}; // NOP
 // 2=ldd , 3=std,==> pass in_src
     
-    assign is_alu = !(controlSignal == 4 || controlSignal >= 13);
+    assign is_alu = !(controlSignal==0 || controlSignal == 4 || controlSignal >= 11);
     assign zeroFlag = (is_alu) ? !(|out) : zeroFlag;
     assign negFlag = (is_alu) ? out[N-1] : negFlag;
 endmodule
