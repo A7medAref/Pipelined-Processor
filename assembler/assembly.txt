@@ -3,3 +3,5 @@ add        r3,           r4
 push            r7
 ldm r5, 12
 jmp r6
+shr r3, 23
+shl r7, 1

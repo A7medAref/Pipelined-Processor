@@ -1,4 +1,5 @@
 import re
+import os
 op_codes = {
     "nop": "00000",
     "setc": "00001",
@@ -51,8 +52,16 @@ def push_zeros_to_16_bit(str):
 def append_zeros_to_16_bit(str):
     return str + ((16 - len(str))*"0")
 
+def check_immediate(instruction):
+    if(len(instruction) == 2):
+        return False
 
-file_name='assembly.txt'
+    if instruction[0] == 'ldm': 
+        return True
+    #print(instruction[2].isnumeric())
+    return (instruction[0] == 'shr' or instruction[0] == 'shl') and instruction[2].strip().isnumeric()
+
+file_name= './assembly.txt'
 assembly_file = open(file_name, 'r')
 machine_code = open('machine_code.txt', 'w')
 for line in assembly_file:
@@ -61,23 +70,28 @@ for line in assembly_file:
     op_code = ""
     curr_instruction = line.split(' ')
     try:
-        if curr_instruction[0] == 'ldm':
-            print('I am ldm', curr_instruction[2])
-            op_code += op_codes['ldm']
+        if check_immediate(curr_instruction):
+            #print('I am ldm', curr_instruction[2])
+            #print('success', curr_instruction)
+            op_code += op_codes[curr_instruction[0]]
             op_code += op_codes[curr_instruction[1]]
             op_code = append_zeros_to_16_bit(op_code)
             machine_code.write(op_code+'\n')
             machine_code.write(push_zeros_to_16_bit(DecimalToBinary(int(curr_instruction[2])))+'\n')
+            #print(op_code)
+            #print(push_zeros_to_16_bit(DecimalToBinary(int(curr_instruction[2])))+'\n')
 
         else :
-            for code in line.split(' '):
+            for code in curr_instruction:
                 code = code.strip() 
                 op_code += op_codes[code]
             op_code = append_zeros_to_16_bit(op_code)
             machine_code.write(op_code+'\n')
-        print(op_code)
+            #print('success', curr_instruction)
+            #print(op_code)
     except:
-        print("Invalid assembly code")
-    
+        print("Invalid assembly code", curr_instruction)
+
+print('Machine code successfully generated in machine_code.txt')
 assembly_file.close()
 machine_code.close()
