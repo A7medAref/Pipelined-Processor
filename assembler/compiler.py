@@ -66,13 +66,7 @@ def append_zeros_to_16_bit(str):
 
 
 def check_immediate(instruction):
-    if (len(instruction) != 3):
-        return False
-
-    if instruction[0] == 'ldm':
-        return True
-    # print(instruction[2].isnumeric())
-    return (instruction[0] == 'shr' or instruction[0] == 'shl') and int(instruction[2].strip(), 16)
+    return instruction == 'ldm' or instruction == 'shl' or instruction == 'shr'
 
 
 def org_behaviour(file, curr_line, org_address):
@@ -106,7 +100,6 @@ def valid_num_of_operands(instruction, num_of_operands):
     return len(instruction_without_op_code) == 2
 
 
-# print(check_valid_num_of_operands("Add r 1, r 2", 2))
 file_name = './assembly.txt'
 assembly_file = open(file_name, 'r')
 machine_code = open('machine_code.txt', 'w')
@@ -138,38 +131,39 @@ for line in assembly_file:
 
         if info["num_of_operands"] == 0:
             op_code = append_zeros_to_16_bit(info["code"])
+            current_line += 1
         elif info["num_of_operands"] == 1:
             op_codes = line.split(' ')
             op_code = info["code"]
             op_code += registers_op_codes[op_codes[1]]
             op_code = append_zeros_to_16_bit(op_code)
-        else:
-            
-
-        machine_code.write(f"{op_code}\n")
-        # elif check_immediate(curr_instruction):
-        #     # print('I am ldm', curr_instruction[2])
-        #     # print('success', curr_instruction)
-        #     op_code += op_codes[curr_instruction[0]]
-        #     op_code += op_codes[curr_instruction[1]]
-        #     op_code = append_zeros_to_16_bit(op_code)
-        #     machine_code.write(op_code+'\n')
-        #     machine_code.write(hexaToBinary(curr_instruction[2])+'\n')
-        #     current_line += 2
-
-        else:
-            for code in curr_instruction:
-                code = code.strip()
-                op_code += op_codes[code]
-            op_code = append_zeros_to_16_bit(op_code)
-            machine_code.write(op_code+'\n')
             current_line += 1
-            # print('success', curr_instruction)
-            # print(op_code)
+        else:
+            two_operands = re.split(
+        ' ?, ?', line[line.find(' ')+1:])
+
+            hexa_value = ""
+            if two_operands[0] not in registers_op_codes:
+                raise Exception('invalid two operand instruction')
+            
+            op_code += info["code"]
+            op_code += registers_op_codes[two_operands[0]]
+            if two_operands[1] not in registers_op_codes and check_immediate(curr_instruction[0]):
+                hexa_value = hexaToBinary(two_operands[1])
+                op_code = append_zeros_to_16_bit(op_code)+'\n'
+                op_code += hexa_value
+                current_line += 2
+            elif not check_immediate(curr_instruction[0]):
+                op_code += registers_op_codes[two_operands[1]] 
+                op_code = append_zeros_to_16_bit(op_code)
+                current_line += 1
+            else:
+                raise Exception('invalid code')
+        machine_code.write(f"{op_code}\n")
     except:
-        pass
-        # print("Invalid assembly code", curr_instruction)
-        # exit(0)
+        print('Invalid assembly', f"({line})")
+        exit(-1)
+
 
 print('Machine code successfully generated in machine_code.txt')
 assembly_file.close()
