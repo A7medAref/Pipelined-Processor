@@ -1,36 +1,21 @@
+.ORG 0
+LDM R1,50
+inc r1
+call r1
+RTI
+
 .org 20
-LDM R1,31
-SETC
-JC R1
+LDM R1,35 
+INC R2 
+setc
+STD R1,R2 
+LDD R2,R5 
+INC R5 
+PUSH R5 
+POP R7 
+INC R7
 
-LDM R1,37 
-INC R3 
-DEC R3 
-JZ R1 
-
-LDM R1,3d 
-NOT R3 
-JN R1 
-
-LDM R1,43 
-CALL R1 
-INC R6 
-
-LDM R0,6
-ADD R0,R0 
-LDM R7,24 
-JMP R7 
-
-LDM R0,7 
-ADD R0,R0 
-LDM R7,29 
-JMP R7 
-
-LDM R0,8 
-ADD R0,R0 
-LDM R7,2d 
-JMP R7 
-
-LDM R0,9 
-ADD R0,R0 
+.org 51
+CLRC
+ldm r1, 8
 RET
