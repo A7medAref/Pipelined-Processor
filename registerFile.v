@@ -23,6 +23,7 @@ module reg_file (
     wire singleOperand;
     assign singleOperand = (opcode == 3 | opcode == 4 | opcode == 5 | 
                             opcode == 8 | opcode == 9 | opcode == 14 |
+                            opcode == 6 | opcode == 7 |
                             opcode == 30 | opcode == 31);
     
     

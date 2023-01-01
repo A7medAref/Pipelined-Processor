@@ -10,8 +10,9 @@ module pipelinedProcessor(
     input[31:0] write_addr_fm,
     // can be removed
     output [15:0] instruction,
-    input interrupt
-    );
+    input interrupt,
+    input[15:0] in_port,
+    output[15:0] out_port);
 
 
     wire [15:0] memory_data_output;
@@ -126,7 +127,11 @@ module pipelinedProcessor(
                         functions_destination_address,
                         data_sent_back_from_data_memory,
                         dst_from_forwarding_unit,
-                        forward_unit_src);
+                        forward_unit_src,
+                        in_port_signal,
+                        out_port_signal,
+                        out_port,
+                        in_port);
 
     dataMemory dm_1438(mem_read_buf2, 
                         mem_write_buf2, 

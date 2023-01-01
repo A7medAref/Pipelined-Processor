@@ -20,7 +20,9 @@ module ALU#(parameter N=16) (input[N-1:0] new_src,
                             input mem_read,
                             input mem_read_load_case,
                             output[N-1:0] in_dst,
-                            output[N-1:0] in_src);
+                            output[N-1:0] in_src,
+                            input in_port_signal,
+                            input [N-1:0] in_port);
 
     assign in_src = ((reg1_buf1 === reg2_buf2) && wb1) ? result_prev1 : 
                   ((reg1_buf1 === reg2_buf3) && wb2) ?
@@ -47,6 +49,7 @@ module ALU#(parameter N=16) (input[N-1:0] new_src,
                               (controlSignal == 12) ? {0 , out} :
                               (controlSignal == 13) ? {carryFlag , in_src} : // STD or load
                               (controlSignal == 14) ? {carryFlag , instruction} : // LOAD immediate
+                              (in_port_signal) ? {carryFlag, in_port} :
                               {carryFlag, out}; // NOP
 // 2=ldd , 3=std,==> pass in_src
     

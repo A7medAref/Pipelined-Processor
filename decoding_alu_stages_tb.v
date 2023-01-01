@@ -10,6 +10,9 @@ module aa_pipe_tb;
     reg write_enable_fm;
     wire [15:0] instruction;
     reg interrupt;
+    reg[15:0] in_port;
+    wire[15:0] out_port;
+
     pipelinedProcessor pp_508251(
         clk,
         reset,
@@ -21,8 +24,9 @@ module aa_pipe_tb;
         write_addr_fm,
         ////////////
         instruction,
-        interrupt
-        );
+        interrupt,
+        in_port,
+        out_port);
 
     initial begin
         ////////////////////// LOADING THE PROGRAM
@@ -31,6 +35,7 @@ module aa_pipe_tb;
         rst_fm=1;
         write_addr_fm=32'b0000_0000_0000_0010_0000;
         write_data_fm=16'b01110_001_00000000;
+        in_port=7;
 
         #100 rst_fm=0;
 
@@ -40,25 +45,28 @@ module aa_pipe_tb;
         write_data_fm=16'b0000000000_100011;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00100_010_00000000;
+        write_data_fm=16'b00111_001_00000000;
 
         #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01100_001_010_00000;
+        write_data_fm=16'b00110_001_00000000;
 
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01010_010_101_00000;
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b01100_001_010_00000;
 
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00100_101_00000000;
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b01010_010_101_00000;
 
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01000_101_00000000;
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b00100_101_00000000;
 
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b01001_111_00000000;
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b01000_101_00000000;
 
-        #100 write_addr_fm=write_addr_fm+1;
-        write_data_fm=16'b00100_111_00000000;
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b01001_111_00000000;
+
+        // #100 write_addr_fm=write_addr_fm+1;
+        // write_data_fm=16'b00100_111_00000000;
 
         #100
         reset = 1;

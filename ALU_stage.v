@@ -26,8 +26,11 @@ module ALU_stage (
     input[1:0] functions_destination_address,
     input[15:0] data_sent_back_from_data_memory,
     output reg[15:0] dst_from_forwarding_unit,
-    output [15:0] forward_unit_src
-);
+    output [15:0] forward_unit_src,
+    input in_port_signal,
+    input out_port_signal,
+    output reg[15:0] out_port,
+    input [15:0] in_port);
 
     wire carry, zero, neg;
     wire [15:0] out;
@@ -59,7 +62,9 @@ module ALU_stage (
                 mem_read,
                 mem_read_load_case,
                 in_dst,
-                forward_unit_src
+                forward_unit_src,
+                in_port_signal,
+                in_port
                 );
 
 
@@ -82,6 +87,10 @@ module ALU_stage (
         end
         else
             flags = {carry , zero , neg};
+
+        if(out_port_signal) begin
+            out_port=forward_unit_src;
+        end
 
         jump_occured = (jump_type_signal == 1 && flags_buffered[1]) ||
         (jump_type_signal == 2 && flags_buffered[0])||
